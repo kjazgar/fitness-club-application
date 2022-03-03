@@ -11,9 +11,9 @@ public class Coach {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private final int id;
 
-    private final String name;
-    private final String surname;
-    private final int yearOfBirth;
+    public final String name;
+    public final String surname;
+    public final int yearOfBirth;
 
     protected Coach() {
         this.id = 0;

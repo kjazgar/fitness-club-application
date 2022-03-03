@@ -7,9 +7,21 @@ import java.util.List;
 
 public class CoachService {
 
-    private static final List<Coach> listOfCoaches = new ArrayList();
+    private final List<Coach> listOfCoaches;
 
-    public static void add(Coach coach){
+    public CoachService() {
+         listOfCoaches = new ArrayList();
+    }
+
+    public void add(Coach coach){
         listOfCoaches.add(coach);
+    }
+
+    public List<Coach> getAllCoaches() {
+        return listOfCoaches;
+    }
+
+    public String getCoach(int id) {
+        return listOfCoaches.get(id).toString();
     }
 }
