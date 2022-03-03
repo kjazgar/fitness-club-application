@@ -16,16 +16,6 @@ public class EventController {
         return "events with id ";
     }
 
-    @GetMapping("/events/{id}")
-    public String printEventWithId(){
-        return "events with id ";
-    }
-
-    @GetMapping("/events/{id}")
-    public String printEventWithId(){
-        return "events with id ";
-    }
-
     @GetMapping("/events?coachId={id}")
     public String printAllEventsByTheCoach(){
         return "all events by the coach ";
