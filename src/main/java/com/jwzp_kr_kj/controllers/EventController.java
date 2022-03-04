@@ -1,19 +1,29 @@
 package com.jwzp_kr_kj.controllers;
 
+import com.jwzp_kr_kj.services.EventService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 public class EventController {
+
+    EventService eventService;
+
+    @Autowired
+    public EventController(){
+        eventService = new EventService();
+    }
+
     @GetMapping("/events")
-    public String printEvents(){
-        return "events";
+    public ResponseEntity<String> printEvents(){
+        return ResponseEntity.ok("events");
     }
 
     @GetMapping("/events/{id}")
-    public String printEventWithId(){
-        return "events with id ";
+    public ResponseEntity<String> printEventWithId(int id){
+        return ResponseEntity.ok(eventService.getEvent(id));
     }
 
     @GetMapping("/events?coachId={id}")
