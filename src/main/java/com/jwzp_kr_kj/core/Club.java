@@ -20,7 +20,7 @@ public class Club {
     private final String name;
     private final String address;
 
-    protected Club(){
+    public Club(){
         id = 0;
         startTime = null;
         duration = Duration.ZERO;
@@ -28,7 +28,7 @@ public class Club {
         address = "";
     }
 
-    protected Club(int id, LocalDateTime startTime, Duration duration, String name, String address) {
+    public Club(int id, LocalDateTime startTime, Duration duration, String name, String address) {
         this.id = id;
         this.startTime = startTime;
         this.duration = duration;
