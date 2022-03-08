@@ -1,6 +1,9 @@
 package com.jwzp_kr_kj.controllers;
 
-import com.jwzp_kr_kj.services.EventService;
+import com.jwzp_kr_kj.core.Event;
+import com.jwzp_kr_kj.services.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.ResponseEntity;
@@ -16,23 +19,28 @@ public class EventController {
         eventService = new EventService();
     }
 
+    @PostMapping (value = "/events", consumes = "application/json")
+    public void addEvent(@RequestBody Event event){
+        eventService.listOfEvents.add(event);
+    }
+
     @GetMapping("/events")
     public ResponseEntity<String> printEvents(){
-        return ResponseEntity.ok("events");
+        return ResponseEntity.ok(eventService.listOfEvents.toString());
     }
 
     @GetMapping("/events/{id}")
     public ResponseEntity<String> printEventWithId(int id){
-        return ResponseEntity.ok(eventService.getEvent(id));
+        return ResponseEntity.ok(eventService.getEventById(id).toString());
     }
 
     @GetMapping("/events?coachId={id}")
-    public String printAllEventsByTheCoach(){
-        return "all events by the coach ";
+    public ResponseEntity<String> printAllEventsByTheCoach(int id){
+        return ResponseEntity.ok(eventService.getEventsByCoachId(id).toString());
     }
 
     @GetMapping("/events?clubId={id}")
-    public String printAllEventsByTheClub(){
-        return "all events by the club";
+    public ResponseEntity<String> printAllEventsByTheClub(int id){
+        return ResponseEntity.ok(eventService.getEventsByClubId(id).toString());
     }
 }

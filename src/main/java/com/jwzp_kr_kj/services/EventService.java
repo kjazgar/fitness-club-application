@@ -21,8 +21,32 @@ public class EventService {
         return listOfEvents;
     }
 
-    public String getEvent(int id) {
+    public String getEventById(int id) {
         return listOfEvents.get(id).toString();
+    }
+
+    public List<Event> getEventsByClubId(int clubId){
+
+        List<Event> eventsFromClubList = new ArrayList<>();
+        for(Event event : listOfEvents){
+            if(event.getClubId() == clubId){
+                eventsFromClubList.add(event);
+            }
+        }
+
+        return eventsFromClubList;
+    }
+
+    public List<Event> getEventsByCoachId(int coachId){
+
+        List<Event> eventsForCoachList = new ArrayList<>();
+        for(Event event : listOfEvents){
+            if(event.getCoachId() == coachId){
+                eventsForCoachList.add(event);
+            }
+        }
+
+        return eventsForCoachList;
     }
 
 
