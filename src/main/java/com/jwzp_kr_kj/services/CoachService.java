@@ -13,7 +13,7 @@ public class CoachService {
          listOfCoaches = new ArrayList();
     }
 
-    public void add(Coach coach){
+    public void addCoach(Coach coach){
         listOfCoaches.add(coach);
     }
 

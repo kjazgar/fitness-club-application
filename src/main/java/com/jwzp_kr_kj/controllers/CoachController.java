@@ -29,6 +29,6 @@ public class CoachController {
 
     @PostMapping(path = "/coach")
     public void addCoach(@RequestBody Coach coach) {
-        coachService.add(coach);
+        coachService.addCoach(coach);
     }
 }

@@ -29,6 +29,6 @@ public class ClubController {
 
     @PostMapping(path = "/club")
     public void addClub(@RequestBody Club club){
-        clubService.add(club);
+        clubService.addClub(club);
     }
 }

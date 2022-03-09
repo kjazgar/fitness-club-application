@@ -9,7 +9,7 @@ public class ClubService {
 
     private static final List<Club> listOfClubs = new ArrayList<>();
 
-    public void add(Club club) {
+    public void addClub(Club club) {
         listOfClubs.add(club);
     }
 
