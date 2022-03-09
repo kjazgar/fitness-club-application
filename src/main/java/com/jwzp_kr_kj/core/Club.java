@@ -15,10 +15,10 @@ public class Club {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private final int id;
 
-    private final LocalDateTime startTime;
-    private final Duration duration;
-    private final String name;
-    private final String address;
+    public final LocalDateTime startTime;
+    public final Duration duration;
+    public final String name;
+    public final String address;
 
     public Club(){
         id = 0;

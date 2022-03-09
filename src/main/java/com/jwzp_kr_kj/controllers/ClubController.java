@@ -3,6 +3,7 @@ package com.jwzp_kr_kj.controllers;
 import com.jwzp_kr_kj.services.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -19,11 +20,11 @@ public class ClubController {
 
     @GetMapping("/clubs")
     public ResponseEntity<String> printClubs(){
-        return ResponseEntity.ok("clubs");
+        return ResponseEntity.ok(clubService.getAllClubs().get(0).name);
     }
 
     @GetMapping("/clubs/{id}")
-    public String printClubWithId(){
-        return "clubs with id ";
+    public String printClubWithId(@PathVariable int id){
+        return clubService.getClub(id);
     }
 }
