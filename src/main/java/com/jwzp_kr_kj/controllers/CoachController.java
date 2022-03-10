@@ -19,7 +19,7 @@ public class CoachController {
 
     @GetMapping("/coach")
     public ResponseEntity<?> printCoaches(){
-        return ResponseEntity.ok(coachService.getAllCoaches().get(0).name);
+        return ResponseEntity.ok(coachService.getAllCoaches().toString());
     }
 
     @GetMapping("/coaches/{id}")

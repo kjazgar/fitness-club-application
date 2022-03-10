@@ -19,7 +19,7 @@ public class ClubController {
 
     @GetMapping("/clubs")
     public ResponseEntity<String> printClubs(){
-        return ResponseEntity.ok(clubService.getAllClubs().get(0).name);
+        return ResponseEntity.ok(clubService.getAllClubs().toString());
     }
 
     @GetMapping("/clubs/{id}")

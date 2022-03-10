@@ -7,7 +7,11 @@ import java.util.List;
 
 public class ClubService {
 
-    private static final List<Club> listOfClubs = new ArrayList<>();
+    private final List<Club> listOfClubs;
+
+    public ClubService(){
+        listOfClubs = new ArrayList();
+    }
 
     public void addClub(Club club) {
         listOfClubs.add(club);
