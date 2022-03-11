@@ -11,21 +11,27 @@ public class Coach {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private final int id;
 
-    public final String name;
-    public final String surname;
+    public final String firstName;
+    public final String lastName;
     public final int yearOfBirth;
 
     public Coach() {
         this.id = 0;
-        this.name = "";
-        this.surname = "";
+        this.firstName = "";
+        this.lastName = "";
         this.yearOfBirth = 0;
     }
 
     public Coach(int id, String name, String surname, int yearOfBirth) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
+        this.firstName = name;
+        this.lastName = surname;
         this.yearOfBirth = yearOfBirth;
+    }
+
+    @Override
+    public String toString(){
+        String string = "{ \n \"name\": \"" + this.firstName +"\",\n \"surname\": \""+this.lastName +"\",\n \"yearOfBirth\": \"" + this.yearOfBirth + "\" \n }";
+        return string;
     }
 }
