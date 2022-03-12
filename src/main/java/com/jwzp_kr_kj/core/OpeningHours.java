@@ -1,15 +1,17 @@
 package com.jwzp_kr_kj.core;
 
+import java.time.LocalTime;
+
 public class OpeningHours {
-    private final String from;
-    private final String to;
+    private final LocalTime from;
+    private final LocalTime to;
 
 //    public OpeningHours() {
 //        this.from = "";
 //        this.to = "";
 //    }
 
-    public OpeningHours(DayOfTheWeek dayOfTheWeek, String from, String to) {
+    public OpeningHours(DayOfTheWeek dayOfTheWeek, LocalTime from, LocalTime to) {
         this.from = from;
         this.to = to;
     }
