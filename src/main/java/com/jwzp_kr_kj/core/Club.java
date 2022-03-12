@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 @Entity(name="clubs")
 public class Club {
@@ -15,25 +13,27 @@ public class Club {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private final int id;
 
-    public final LocalDateTime startTime;
-    public final Duration duration;
     public final String name;
     public final String address;
+    public final OpeningDays whenOpen;
 
-    public Club(){
-        id = 0;
-        startTime = null;
-        duration = Duration.ZERO;
-        name = "";
-        address = "";
-    }
+//    public Club(){
+//        id = 0;
+//        name = "";
+//        address = "";
+//        whenOpen = null;
+//    }
 
-    public Club(int id, LocalDateTime startTime, Duration duration, String name, String address) {
+    public Club(int id, String name, String address, OpeningDays whenOpen) {
         this.id = id;
-        this.startTime = startTime;
-        this.duration = duration;
         this.name = name;
         this.address = address;
+        this.whenOpen = whenOpen;
+    }
+
+    @Override
+    public String toString(){
+        return "{ \n \"name\": \"" + this.name +"\",\n \"address\": \""+ this.address +"\",\n \"whenOpen\": {\n" + this.whenOpen.toString() + "}";
     }
 
 }
