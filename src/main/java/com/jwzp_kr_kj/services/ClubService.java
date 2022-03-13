@@ -1,10 +1,12 @@
 package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.core.Club;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ClubService {
 
     private final List<Club> listOfClubs;
@@ -21,7 +23,7 @@ public class ClubService {
         return listOfClubs;
     }
 
-    public String getClub(int id) {
-        return listOfClubs.get(id).toString();
+    public Club getClub(int id) {
+        return listOfClubs.get(id);
     }
 }

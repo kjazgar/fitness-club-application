@@ -17,6 +17,19 @@ public class CoachService {
         listOfCoaches.add(coach);
     }
 
+    public Coach findCoach(int id){
+        for(Coach c : listOfCoaches){
+            if (c.getId() == id){
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public void deleteCoach(int id){
+
+    }
+
     public List<Coach> getAllCoaches() {
         return listOfCoaches;
     }

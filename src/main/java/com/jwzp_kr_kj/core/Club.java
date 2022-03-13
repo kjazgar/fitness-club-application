@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Map;
 
 @Entity(name="clubs")
 public class Club {
@@ -15,25 +16,13 @@ public class Club {
 
     public final String name;
     public final String address;
-    public final OpeningDays whenOpen;
+    public final Map<DayOfTheWeek, OpeningHours> whenOpen;
 
-//    public Club(){
-//        id = 0;
-//        name = "";
-//        address = "";
-//        whenOpen = null;
-//    }
 
-    public Club(int id, String name, String address, OpeningDays whenOpen) {
+    public Club(int id, String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.whenOpen = whenOpen;
     }
-
-    @Override
-    public String toString(){
-        return "{ \n \"name\": \"" + this.name +"\",\n \"address\": \""+ this.address +"\",\n \"whenOpen\": {\n" + this.whenOpen.toString() + "}";
-    }
-
 }
