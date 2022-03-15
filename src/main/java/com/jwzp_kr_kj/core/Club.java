@@ -1,10 +1,7 @@
 package com.jwzp_kr_kj.core;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Map;
 
 @Entity(name="clubs")
@@ -16,6 +13,8 @@ public class Club {
 
     public final String name;
     public final String address;
+    //    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     public final Map<DayOfTheWeek, OpeningHours> whenOpen;
 
 

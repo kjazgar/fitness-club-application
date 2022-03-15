@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 
 @RestController
 public class CoachController {
 
     CoachService coachService;
 
-    public CoachController() {
-        coachService = new CoachService();
+    public CoachController(CoachService coachService) {
+        this.coachService = coachService;
     }
 
     @GetMapping("/coaches")
@@ -26,7 +28,7 @@ public class CoachController {
     }
 
     @GetMapping("/coaches/{id}")
-    public String printCoachWithId(@PathVariable int id){
+    public Optional<Coach> printCoachWithId(@PathVariable int id){
         return coachService.getCoach(id);
     }
 
