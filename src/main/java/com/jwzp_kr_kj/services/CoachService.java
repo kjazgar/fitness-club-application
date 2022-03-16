@@ -13,6 +13,7 @@ import java.util.Optional;
 public class CoachService {
 
     public CoachRepository coachRepository;
+
     @Autowired
     public CoachService(CoachRepository coachRepository) {
          this.coachRepository = coachRepository;

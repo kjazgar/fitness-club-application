@@ -13,8 +13,7 @@ public class Club {
 
     public final String name;
     public final String address;
-    //    @ManyToMany(cascade = CascadeType.ALL)
-    @OneToMany(fetch = FetchType.LAZY)
+    @ElementCollection
     public final Map<DayOfTheWeek, OpeningHours> whenOpen;
 
 
