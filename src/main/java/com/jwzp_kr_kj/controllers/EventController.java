@@ -2,12 +2,11 @@ package com.jwzp_kr_kj.controllers;
 
 import com.jwzp_kr_kj.core.Event;
 import com.jwzp_kr_kj.services.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @RestController
 public class EventController {
@@ -15,32 +14,34 @@ public class EventController {
     EventService eventService;
 
     @Autowired
-    public EventController(){
-        eventService = new EventService();
+    public EventController(EventService eventService){
+        this.eventService = eventService;
     }
 
     @PostMapping (value = "/events", consumes = "application/json")
     public void addEvent(@RequestBody Event event){
-        eventService.listOfEvents.add(event);
+        eventService.addEvent(event);
     }
 
     @GetMapping("/events")
-    public ResponseEntity<String> printEvents(){
-        return ResponseEntity.ok(eventService.listOfEvents.toString());
+    public ResponseEntity<?> printEvents(){
+        return ResponseEntity.ok(eventService.getAllEvents());
     }
 
     @GetMapping("/events/{id}")
-    public ResponseEntity<String> printEventWithId(int id){
-        return ResponseEntity.ok(eventService.getEventById(id).toString());
+    public ResponseEntity<?> printEventWithId(@PathVariable int id){
+        return ResponseEntity.ok(eventService.getEvent(id));
     }
 
-    @GetMapping("/events?coachId={id}")
-    public ResponseEntity<String> printAllEventsByTheCoach(int id){
-        return ResponseEntity.ok(eventService.getEventsByCoachId(id).toString());
+    @GetMapping(value = "/events", params = "coachId")
+    public ResponseEntity<?> printAllEventsByTheCoach(@RequestParam("coachId") int coachId){
+        List<Event> events = eventService.getEventsByCoach(coachId);
+        return ResponseEntity.ok(events);
     }
 
-    @GetMapping("/events?clubId={id}")
-    public ResponseEntity<String> printAllEventsByTheClub(int id){
-        return ResponseEntity.ok(eventService.getEventsByClubId(id).toString());
+    @GetMapping(value = "/events", params = "clubId")
+    public ResponseEntity<?> printAllEventsByTheClub(@RequestParam("clubId") int clubId){
+        List<Event> events = eventService.getEventsByClub(clubId);
+        return ResponseEntity.ok(events);
     }
 }
