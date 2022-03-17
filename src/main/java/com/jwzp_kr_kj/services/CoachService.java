@@ -2,8 +2,9 @@ package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.core.Coach;
 import com.jwzp_kr_kj.repos.CoachRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,24 +17,25 @@ public class CoachService {
 
     @Autowired
     public CoachService(CoachRepository coachRepository) {
-         this.coachRepository = coachRepository;
+        this.coachRepository = coachRepository;
     }
 
-    public void addCoach(Coach coach){
+    public void addCoach(Coach coach) {
         coachRepository.save(coach);
     }
 
-//    public Coach findCoach(int id){
-//        for(Coach c : listOfCoaches){
-//            if (c.getId() == id){
-//                return c;
-//            }
-//        }
-//        return null;
-//    }
+    public Optional<Coach> findCoach(int id) {
+        return coachRepository.findById(id);
+    }
 
-    public void deleteCoach(int id){
-
+    public ResponseEntity<Object> deleteCoach(int id) {
+        Optional<Coach> coach = findCoach(id);
+        if (coach.isPresent()) {
+            coachRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     public List<Coach> getAllCoaches() {
