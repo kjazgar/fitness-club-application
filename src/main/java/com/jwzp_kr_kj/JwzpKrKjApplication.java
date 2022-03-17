@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JwzpKrKjApplication {
 
     public static void main(String[] args) {
+        System.out.println("Kamila jest super!");
         SpringApplication.run(JwzpKrKjApplication.class, args);
     }
 

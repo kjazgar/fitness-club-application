@@ -12,11 +12,11 @@ public class Coach {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private final int id;
+    public final int id;
 
-    public final String firstName;
-    public final String lastName;
-    public final int yearOfBirth;
+    public String firstName;
+    public String lastName;
+    public int yearOfBirth;
 
     public Coach() {
         this.id = 0;
@@ -32,4 +32,27 @@ public class Coach {
         this.yearOfBirth = yearOfBirth;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setYearOfBirth(int yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
 }

@@ -7,14 +7,11 @@ import com.jwzp_kr_kj.core.Coach;
 import com.jwzp_kr_kj.services.CoachService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -46,8 +43,18 @@ public class CoachController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PatchMapping(path = "/coaches/{id}")
+    public ResponseEntity<Object> updateCoach(@PathVariable int id, @RequestBody Coach newCoach) {
+        Optional<Coach> updatedCoach = coachService.findCoach(id);
+        if (updatedCoach.isPresent()) {
+            return coachService.updateCoach(id,newCoach);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @DeleteMapping("/coaches/{id}")
-    public ResponseEntity<Object> deleteCoach(@PathVariable(value = "id") int id){
+    public ResponseEntity<Object> deleteCoach(@PathVariable(value = "id") int id) {
         return coachService.deleteCoach(id);
     }
 }

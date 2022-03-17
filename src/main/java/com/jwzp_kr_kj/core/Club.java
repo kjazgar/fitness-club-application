@@ -9,7 +9,7 @@ public class Club {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private final int id;
+    public final int id;
 
     public final String name;
     public final String address;
