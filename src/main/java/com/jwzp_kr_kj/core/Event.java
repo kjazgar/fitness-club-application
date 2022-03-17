@@ -1,9 +1,8 @@
 package com.jwzp_kr_kj.core;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.persistence.*;
 import java.time.Duration;
 
 
@@ -14,7 +13,9 @@ public class Event {
     private final int id;
 
     private final String title;
-    private final DayOfTheWeek day_of_the_week;
+
+    @JsonProperty("day")
+    private final DayOfTheWeek dayOfTheWeek;
     private final String time;
     private final Duration duration;
     private final int coachId;
@@ -23,7 +24,7 @@ public class Event {
     public Event() {
         this.id = 0;
         this.title = "";
-        this.day_of_the_week = null;
+        this.dayOfTheWeek = null;
         this.time = null;
         this.duration = Duration.ZERO;
         this.coachId = 0;
@@ -33,7 +34,7 @@ public class Event {
     public Event(int id, String name, DayOfTheWeek day, String time, Duration duration, int coachId, int clubId) {
         this.id = id;
         this.title = name;
-        this.day_of_the_week = day;
+        this.dayOfTheWeek = day;
         this.time = time;
         this.duration = duration;
         this.coachId = coachId;
@@ -56,8 +57,8 @@ public class Event {
         return id;
     }
 
-    public DayOfTheWeek getDay_of_the_week() {
-        return day_of_the_week;
+    public DayOfTheWeek getDayOfTheWeek() {
+        return dayOfTheWeek;
     }
 
     public Duration getDuration() {
@@ -70,7 +71,7 @@ public class Event {
 
     @Override
     public String toString(){
-        String string = "{ \n \"title\": \"" + this.title +"\",\n \"day\": \""+this.day_of_the_week +"\",\n \"time\": \"" + this.time + "\",\n \"duration\": \""+this.duration + "\", \n \"clubId\":\""+this.clubId + "\",\n \" coachId \": \"" + this.coachId + "\" \n }";
+        String string = "{ \n \"title\": \"" + this.title +"\",\n \"day\": \""+this.dayOfTheWeek +"\",\n \"time\": \"" + this.time + "\",\n \"duration\": \""+this.duration + "\", \n \"clubId\":\""+this.clubId + "\",\n \" coachId \": \"" + this.coachId + "\" \n }";
         return string;
     }
 }

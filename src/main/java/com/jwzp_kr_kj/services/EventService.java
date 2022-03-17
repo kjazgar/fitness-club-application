@@ -1,53 +1,40 @@
 package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.core.Event;
+import com.jwzp_kr_kj.repos.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class EventService {
 
-    public List<Event> listOfEvents = new ArrayList<>();
+    public EventRepository eventRepository;
 
-    public EventService(){
-        listOfEvents = new ArrayList();
+    @Autowired
+    public EventService(EventRepository eventRepository){
+        this.eventRepository = eventRepository;
     }
 
     public void addEvent(Event event){
-        listOfEvents.add(event);
+        eventRepository.save(event);
     }
 
-    public List<Event> getListOfEvents() {
-        return listOfEvents;
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
     }
 
-    public String getEventById(int id) {
-        return listOfEvents.get(id).toString();
+    public Optional<Event> getEvent(int id) {
+        return eventRepository.findById(id);
     }
 
-    public List<Event> getEventsByClubId(int clubId){
-
-        List<Event> eventsFromClubList = new ArrayList<>();
-        for(Event event : listOfEvents){
-            if(event.getClubId() == clubId){
-                eventsFromClubList.add(event);
-            }
-        }
-
-        return eventsFromClubList;
+    public List<Event> getEventsByCoach(int coachId){
+        return eventRepository.findByCoachId(coachId);
     }
 
-    public List<Event> getEventsByCoachId(int coachId){
-
-        List<Event> eventsForCoachList = new ArrayList<>();
-        for(Event event : listOfEvents){
-            if(event.getCoachId() == coachId){
-                eventsForCoachList.add(event);
-            }
-        }
-
-        return eventsForCoachList;
+    public List<Event> getEventsByClub(int clubId){
+        return eventRepository.findByClubId(clubId);
     }
-
-
 }

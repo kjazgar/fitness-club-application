@@ -1,6 +1,9 @@
 package com.jwzp_kr_kj.core;
 
-public enum DayOfTheWeek{
+import javax.persistence.*;
+import java.io.Serializable;
+
+public enum DayOfTheWeek {
     MONDAY,
     TUESDAY,
     WEDNESDAY,
@@ -9,3 +12,7 @@ public enum DayOfTheWeek{
     SATURDAY,
     SUNDAY
 }
+
+
+
+
