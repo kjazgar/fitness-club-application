@@ -32,7 +32,12 @@ public class EventController {
 
     @GetMapping("/events/{id}")
     public ResponseEntity<?> printEventWithId(@PathVariable int id){
-        return ResponseEntity.ok(eventService.getEvent(id));
+        Optional<Event> event = eventService.getEvent(id);
+        if(event.isPresent()){
+            return ResponseEntity.ok(eventService.getEvent(id));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping(value = "/events", params = "coachId")
