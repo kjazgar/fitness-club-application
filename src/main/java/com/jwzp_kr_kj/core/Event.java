@@ -12,14 +12,14 @@ public class Event {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private final int id;
 
-    private final String title;
+    private String title;
 
     @JsonProperty("day")
-    private final DayOfTheWeek dayOfTheWeek;
-    private final String time;
-    private final Duration duration;
-    private final int coachId;
-    private final int clubId;
+    private DayOfTheWeek dayOfTheWeek;
+    private String time;
+    private Duration duration;
+    private int coachId;
+    private int clubId;
 
     public Event() {
         this.id = 0;
@@ -67,6 +67,30 @@ public class Event {
 
     public String getTime() {
         return time;
+    }
+
+    public void setDayOfTheWeek(DayOfTheWeek dayOfTheWeek) {
+        this.dayOfTheWeek = dayOfTheWeek;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setClubId(int clubId){
+        this.clubId = clubId;
+    }
+
+    public void setCoachId(int coachId){
+        this.coachId = coachId;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     @Override
