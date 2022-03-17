@@ -32,13 +32,4 @@ public class Coach {
         this.yearOfBirth = yearOfBirth;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public String toString(){
-        String string = "{ \n \"name\": \"" + this.firstName +"\",\n \"surname\": \""+this.lastName +"\",\n \"yearOfBirth\": \"" + this.yearOfBirth + "\" \n }";
-        return string;
-    }
 }
