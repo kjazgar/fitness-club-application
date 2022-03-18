@@ -92,10 +92,4 @@ public class Event {
     public void setDuration(Duration duration) {
         this.duration = duration;
     }
-
-    @Override
-    public String toString(){
-        String string = "{ \n \"title\": \"" + this.title +"\",\n \"day\": \""+this.dayOfTheWeek +"\",\n \"time\": \"" + this.time + "\",\n \"duration\": \""+this.duration + "\", \n \"clubId\":\""+this.clubId + "\",\n \" coachId \": \"" + this.coachId + "\" \n }";
-        return string;
-    }
 }
