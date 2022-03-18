@@ -1,7 +1,9 @@
 package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.core.Coach;
+import com.jwzp_kr_kj.core.Event;
 import com.jwzp_kr_kj.repos.CoachRepository;
+import com.jwzp_kr_kj.repos.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class CoachService {
 
     public CoachRepository coachRepository;
+    public EventRepository eventRepository;
 
     @Autowired
-    public CoachService(CoachRepository coachRepository) {
+    public CoachService(CoachRepository coachRepository, EventRepository eventRepository) {
         this.coachRepository = coachRepository;
+        this.eventRepository = eventRepository;
     }
 
     public void addCoach(Coach coach) {
@@ -28,6 +32,10 @@ public class CoachService {
         Optional<Coach> coach = getCoach(id);
         if (coach.isPresent()) {
             coachRepository.deleteById(id);
+            List<Event> events = eventRepository.findByCoachId(id);
+            for (Event e : events) {
+                eventRepository.deleteById(e.getId());
+            }
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
