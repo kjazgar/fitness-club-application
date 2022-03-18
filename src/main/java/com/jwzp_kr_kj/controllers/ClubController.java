@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jwzp_kr_kj.core.Club;
-import com.jwzp_kr_kj.core.Coach;
 import com.jwzp_kr_kj.services.ClubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
