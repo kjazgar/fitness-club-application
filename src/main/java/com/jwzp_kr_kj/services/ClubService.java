@@ -42,4 +42,14 @@ public class ClubService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    public ResponseEntity<Object> updateClub(int id, Club newClub){
+        Optional<Object> updatedClub = clubRepository.findById(id).map(club -> {
+            club.setName(newClub.getName());
+            club.setAddress(newClub.getAddress());
+            club.setWhenOpen(newClub.getWhenOpen());
+            return clubRepository.save(club);
+        });
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

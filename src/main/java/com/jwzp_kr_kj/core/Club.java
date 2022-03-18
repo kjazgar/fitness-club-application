@@ -12,10 +12,10 @@ public class Club {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public final int id;
 
-    public final String name;
-    public final String address;
+    public String name;
+    public String address;
     @ElementCollection
-    public final Map<DayOfTheWeek, OpeningHours> whenOpen;
+    public Map<DayOfTheWeek, OpeningHours> whenOpen;
 
     public Club() {
         id = 0;
@@ -28,6 +28,30 @@ public class Club {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.whenOpen = whenOpen;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    public void setAddress(String address){
+        this.address = address;
+    }
+
+    public Map<DayOfTheWeek, OpeningHours> getWhenOpen(){
+        return whenOpen;
+    }
+
+    public void setWhenOpen(Map<DayOfTheWeek, OpeningHours> whenOpen){
         this.whenOpen = whenOpen;
     }
 }
