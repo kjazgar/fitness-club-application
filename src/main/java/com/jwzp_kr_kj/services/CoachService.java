@@ -24,12 +24,8 @@ public class CoachService {
         coachRepository.save(coach);
     }
 
-    public Optional<Coach> findCoach(int id) {
-        return coachRepository.findById(id);
-    }
-
     public ResponseEntity<Object> deleteCoach(int id) {
-        Optional<Coach> coach = findCoach(id);
+        Optional<Coach> coach = getCoach(id);
         if (coach.isPresent()) {
             coachRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();

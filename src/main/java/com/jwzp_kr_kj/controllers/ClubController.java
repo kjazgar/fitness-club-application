@@ -40,4 +40,9 @@ public class ClubController {
         clubService.addClub(club);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @DeleteMapping(path = "/clubs/{id}")
+    public ResponseEntity<Object> deleteClub(@PathVariable int id, @RequestBody Club club){
+        return clubService.deleteClub(id);
+    }
 }

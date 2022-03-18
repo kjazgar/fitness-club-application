@@ -45,7 +45,7 @@ public class CoachController {
 
     @PatchMapping(path = "/coaches/{id}")
     public ResponseEntity<Object> updateCoach(@PathVariable int id, @RequestBody Coach newCoach) {
-        Optional<Coach> updatedCoach = coachService.findCoach(id);
+        Optional<Coach> updatedCoach = coachService.getCoach(id);
         if (updatedCoach.isPresent()) {
             return coachService.updateCoach(id,newCoach);
         } else {
