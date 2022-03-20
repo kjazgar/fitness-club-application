@@ -3,7 +3,10 @@ package com.jwzp_kr_kj.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jwzp_kr_kj.core.Club;
+import com.jwzp_kr_kj.core.DayOfTheWeek;
 import com.jwzp_kr_kj.services.ClubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,8 @@ import java.util.Optional;
 public class ClubController {
 
     ClubService clubService;
-    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    ObjectWriter ow = new ObjectMapper().findAndRegisterModules().registerModule(new JavaTimeModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false).writer().withDefaultPrettyPrinter();
 
     public ClubController(ClubService clubService) {
         this.clubService = clubService;
