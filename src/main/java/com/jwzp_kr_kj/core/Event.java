@@ -1,9 +1,11 @@
 package com.jwzp_kr_kj.core;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.Duration;
+import java.time.LocalTime;
 
 
 @Entity(name="events")
@@ -11,12 +13,11 @@ public class Event {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private final int id;
-
     private String title;
-
     @JsonProperty("day")
     private DayOfTheWeek dayOfTheWeek;
-    private String time;
+    @JsonFormat(pattern="HH:mm")
+    private LocalTime time;
     private Duration duration;
     private int coachId;
     private int clubId;
@@ -31,7 +32,7 @@ public class Event {
         this.clubId = 0;
     }
 
-    public Event(int id, String name, DayOfTheWeek day, String time, Duration duration, int coachId, int clubId) {
+    public Event(int id, String name, DayOfTheWeek day, LocalTime time, Duration duration, int coachId, int clubId) {
         this.id = id;
         this.title = name;
         this.dayOfTheWeek = day;
@@ -65,7 +66,7 @@ public class Event {
         return duration;
     }
 
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
@@ -77,7 +78,7 @@ public class Event {
         this.title = title;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
