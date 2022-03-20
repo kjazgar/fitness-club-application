@@ -2,6 +2,7 @@ package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.core.Club;
 import com.jwzp_kr_kj.core.Coach;
+import com.jwzp_kr_kj.core.Event;
 import com.jwzp_kr_kj.repos.ClubRepository;
 import com.jwzp_kr_kj.repos.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,12 @@ import java.util.Optional;
 public class ClubService {
 
     public ClubRepository clubRepository;
-//    public EventRepository eventRepository;
+    public EventRepository eventRepository;
 
     @Autowired
-    public ClubService(ClubRepository clubRepository){
+    public ClubService(ClubRepository clubRepository, EventRepository eventRepository) {
         this.clubRepository = clubRepository;
-//        this.eventRepository = eventRepository;
+        this.eventRepository = eventRepository;
     }
 
     public void addClub(Club club) {
@@ -40,8 +41,10 @@ public class ClubService {
         Optional<Club> club = getClub(id);
         if (club.isPresent()) {
             clubRepository.deleteById(id);
-            //todo
-            //eventRepository.deleteClubById(id);
+            List<Event> events = eventRepository.findByClubId(id);
+            for (Event e : events) {
+                eventRepository.deleteById(e.getId());
+            }
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
