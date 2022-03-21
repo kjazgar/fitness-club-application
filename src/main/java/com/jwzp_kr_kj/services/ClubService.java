@@ -52,7 +52,7 @@ public class ClubService {
     }
 
     public ResponseEntity<Object> updateClub(int id, Club newClub){
-        Optional<Object> updatedClub = clubRepository.findById(id).map(club -> {
+        clubRepository.findById(id).map(club -> {
             club.setName(newClub.getName());
             club.setAddress(newClub.getAddress());
             club.setWhenOpen(newClub.getWhenOpen());
