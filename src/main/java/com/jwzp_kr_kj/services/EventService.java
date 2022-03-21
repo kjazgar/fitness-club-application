@@ -28,19 +28,31 @@ public class EventService {
         this.coachRepository = coachRepository;
     }
 
-    public ResponseEntity<Object> addEvent(Event event){
+    public boolean checkEventConditions(Event event){
         int clubId = event.getClubId();
         int coachId = event.getCoachId();
         Optional<Club> club = clubRepository.findById(clubId);
         Optional<Coach> coach = coachRepository.findById(coachId);
 
-        if(club.isPresent() && coach.isPresent()){
-            eventRepository.save(event);
-            return ResponseEntity.status(HttpStatus.OK).build();
-
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if(event.getDuration().toMinutes() > 1440){
+            return false;
         }
+
+        if(club.isEmpty() || coach.isEmpty()){
+            return false;
+        }
+
+        return club.get().isWithinClubOpeningHours(event.getDayOfTheWeek(), event.getTime(), event.getDuration());
+    }
+
+    public ResponseEntity<Object> addEvent(Event event){
+        if(checkEventConditions(event)){
+            eventRepository.save(event);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     public Optional<Event> findEvent(int id) {
@@ -58,16 +70,20 @@ public class EventService {
     }
 
     public ResponseEntity<Object> updateCoach(int id, Event newEvent){
-        Optional<Object> updatedEvent = eventRepository.findById(id).map(event -> {
-            event.setTitle(newEvent.getTitle());
-            event.setDayOfTheWeek(newEvent.getDayOfTheWeek());
-            event.setTime(newEvent.getTime());
-            event.setDuration(newEvent.getDuration());
-            event.setCoachId(newEvent.getCoachId());
-            event.setClubId(newEvent.getClubId());
-            return eventRepository.save(event);
-        });
-        return ResponseEntity.status(HttpStatus.OK).build();
+        if(checkEventConditions(newEvent)){
+            Optional<Object> updatedEvent = eventRepository.findById(id).map(event -> {
+                event.setTitle(newEvent.getTitle());
+                event.setDayOfTheWeek(newEvent.getDayOfTheWeek());
+                event.setTime(newEvent.getTime());
+                event.setDuration(newEvent.getDuration());
+                event.setCoachId(newEvent.getCoachId());
+                event.setClubId(newEvent.getClubId());
+                return eventRepository.save(event);
+            });
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     public List<Event> getAllEvents() {

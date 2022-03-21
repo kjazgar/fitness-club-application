@@ -2,6 +2,8 @@ package com.jwzp_kr_kj.core;
 
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +55,15 @@ public class Club {
 
     public void setWhenOpen(Map<DayOfTheWeek, OpeningHours> whenOpen){
         this.whenOpen = whenOpen;
+    }
+
+    public boolean isWithinClubOpeningHours(DayOfTheWeek dayOfTheWeek, LocalTime startHour, Duration duration){
+        OpeningHours clubOpeningHours = whenOpen.get(dayOfTheWeek);
+        LocalTime clubStartHour = clubOpeningHours.from;
+        LocalTime clubEndHour = clubOpeningHours.to;
+        LocalTime endHour = startHour.plusHours(duration.toHours());
+
+       return clubStartHour.compareTo(startHour) <= 0 && clubEndHour.compareTo(startHour) >= 0 && clubEndHour.compareTo(endHour) >= 0;
     }
 
 }
