@@ -1,6 +1,10 @@
 package com.jwzp_kr_kj.services;
 
+import com.jwzp_kr_kj.core.Club;
+import com.jwzp_kr_kj.core.Coach;
 import com.jwzp_kr_kj.core.Event;
+import com.jwzp_kr_kj.repos.ClubRepository;
+import com.jwzp_kr_kj.repos.CoachRepository;
 import com.jwzp_kr_kj.repos.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,14 +18,29 @@ import java.util.Optional;
 public class EventService {
 
     public EventRepository eventRepository;
+    public ClubRepository clubRepository;
+    public CoachRepository coachRepository;
 
     @Autowired
-    public EventService(EventRepository eventRepository){
+    public EventService(EventRepository eventRepository, ClubRepository clubRepository, CoachRepository coachRepository){
         this.eventRepository = eventRepository;
+        this.clubRepository = clubRepository;
+        this.coachRepository = coachRepository;
     }
 
-    public void addEvent(Event event){
-        eventRepository.save(event);
+    public ResponseEntity<Object> addEvent(Event event){
+        int clubId = event.getClubId();
+        int coachId = event.getCoachId();
+        Optional<Club> club = clubRepository.findById(clubId);
+        Optional<Coach> coach = coachRepository.findById(coachId);
+
+        if(club.isPresent() && coach.isPresent()){
+            eventRepository.save(event);
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     public Optional<Event> findEvent(int id) {

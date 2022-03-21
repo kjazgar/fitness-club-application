@@ -21,8 +21,8 @@ public class EventController {
     }
 
     @PostMapping (value = "/events", consumes = "application/json")
-    public void addEvent(@RequestBody Event event){
-        eventService.addEvent(event);
+    public ResponseEntity<Object> addEvent(@RequestBody Event event){
+        return eventService.addEvent(event);
     }
 
     @GetMapping("/events")
@@ -63,7 +63,7 @@ public class EventController {
     }
 
     @DeleteMapping("/events/{id}")
-    public ResponseEntity<Object> deleteCoach(@PathVariable(value = "id") int id) {
+    public ResponseEntity<Object> deleteEvent(@PathVariable(value = "id") int id) {
         return eventService.deleteEvent(id);
     }
 }

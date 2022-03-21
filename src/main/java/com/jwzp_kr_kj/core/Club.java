@@ -54,4 +54,5 @@ public class Club {
     public void setWhenOpen(Map<DayOfTheWeek, OpeningHours> whenOpen){
         this.whenOpen = whenOpen;
     }
+
 }
