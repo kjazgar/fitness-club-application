@@ -2,6 +2,7 @@ package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.core.Club;
 import com.jwzp_kr_kj.core.Coach;
+import com.jwzp_kr_kj.core.DayOfTheWeek;
 import com.jwzp_kr_kj.core.Event;
 import com.jwzp_kr_kj.repos.ClubRepository;
 import com.jwzp_kr_kj.repos.EventRepository;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +54,12 @@ public class ClubService {
     }
 
     public ResponseEntity<Object> updateClub(int id, Club newClub){
+        List<Event> events = eventRepository.findByClubId(id);
+        for (Event e : events){
+            if (colisionWithOpeningHours(newClub, e)){
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            }
+        }
         clubRepository.findById(id).map(club -> {
             club.setName(newClub.getName());
             club.setAddress(newClub.getAddress());
@@ -59,5 +67,14 @@ public class ClubService {
             return clubRepository.save(club);
         });
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public boolean colisionWithOpeningHours(Club club, Event event){
+        DayOfTheWeek eventDay = event.getDayOfTheWeek();
+        LocalTime startEvent = event.getTime();
+        LocalTime endEvent = startEvent.plus(event.getDuration());
+        LocalTime clubHourFrom = club.whenOpen.get(eventDay).from;
+        LocalTime clubHourTo = club.whenOpen.get(eventDay).to;
+        return !startEvent.isAfter(clubHourFrom) || !endEvent.isBefore(clubHourTo);
     }
 }
