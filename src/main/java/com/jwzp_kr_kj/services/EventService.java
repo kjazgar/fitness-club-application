@@ -55,12 +55,8 @@ public class EventService {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    public Optional<Event> findEvent(int id) {
-        return eventRepository.findById(id);
-    }
-
     public ResponseEntity<Object> deleteEvent(int id) {
-        Optional<Event> event = findEvent(id);
+        Optional<Event> event = getEvent(id);
         if (event.isPresent()) {
             eventRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -69,9 +65,9 @@ public class EventService {
         }
     }
 
-    public ResponseEntity<Object> updateCoach(int id, Event newEvent){
+    public ResponseEntity<Object> updateEvent(int id, Event newEvent){
         if(checkEventConditions(newEvent)){
-            Optional<Object> updatedEvent = eventRepository.findById(id).map(event -> {
+            eventRepository.findById(id).map(event -> {
                 event.setTitle(newEvent.getTitle());
                 event.setDayOfTheWeek(newEvent.getDayOfTheWeek());
                 event.setTime(newEvent.getTime());

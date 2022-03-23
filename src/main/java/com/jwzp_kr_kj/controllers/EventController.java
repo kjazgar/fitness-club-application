@@ -54,9 +54,9 @@ public class EventController {
 
     @PatchMapping(path = "/events/{id}")
     public ResponseEntity<Object> updateEvent(@PathVariable int id, @RequestBody Event newEvent) {
-        Optional<Event> updatedEvent = eventService.findEvent(id);
+        Optional<Event> updatedEvent = eventService.getEvent(id);
         if (updatedEvent.isPresent()) {
-            return eventService.updateCoach(id, newEvent);
+            return eventService.updateEvent(id, newEvent);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
