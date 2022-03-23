@@ -75,6 +75,9 @@ public class ClubService {
         LocalTime endEvent = startEvent.plus(event.getDuration());
         LocalTime clubHourFrom = club.whenOpen.get(eventDay).from;
         LocalTime clubHourTo = club.whenOpen.get(eventDay).to;
+        if (startEvent.isAfter(endEvent)){
+            return !clubHourFrom.equals(clubHourTo);
+        }
         return !startEvent.isAfter(clubHourFrom) || !endEvent.isBefore(clubHourTo);
     }
 }
