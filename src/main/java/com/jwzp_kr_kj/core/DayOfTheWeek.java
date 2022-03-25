@@ -10,7 +10,11 @@ public enum DayOfTheWeek {
     THURSDAY,
     FRIDAY,
     SATURDAY,
-    SUNDAY
+    SUNDAY;
+
+    public DayOfTheWeek next(){
+        return values()[(ordinal()+1)% values().length];
+    }
 }
 
 
