@@ -34,7 +34,7 @@ public class EventController {
     public ResponseEntity<?> printEventWithId(@PathVariable int id){
         Optional<EventRecord> event = eventService.getEvent(id);
         if(event.isPresent()){
-            return ResponseEntity.ok(eventService.getEvent(id));
+            return ResponseEntity.ok(event);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
