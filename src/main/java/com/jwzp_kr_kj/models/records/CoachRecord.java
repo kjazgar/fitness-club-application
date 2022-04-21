@@ -1,4 +1,4 @@
-package com.jwzp_kr_kj.core;
+package com.jwzp_kr_kj.models.records;
 
 
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 
 
 @Entity(name = "coaches")
-public class Coach {
+public class CoachRecord {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -18,14 +18,14 @@ public class Coach {
     public String lastName;
     public int yearOfBirth;
 
-    public Coach() {
+    public CoachRecord() {
         this.id = 0;
         this.firstName = "";
         this.lastName = "";
         this.yearOfBirth = 0;
     }
 
-    public Coach(int id, String name, String surname, int yearOfBirth) {
+    public CoachRecord(int id, String name, String surname, int yearOfBirth) {
         this.id = id;
         this.firstName = name;
         this.lastName = surname;

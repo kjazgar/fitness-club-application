@@ -1,9 +1,8 @@
 package com.jwzp_kr_kj.services;
 
-import com.jwzp_kr_kj.core.Club;
-import com.jwzp_kr_kj.core.Coach;
-import com.jwzp_kr_kj.core.DayOfTheWeek;
-import com.jwzp_kr_kj.core.Event;
+import com.jwzp_kr_kj.models.records.ClubRecord;
+import com.jwzp_kr_kj.models.DayOfTheWeek;
+import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.repos.ClubRepository;
 import com.jwzp_kr_kj.repos.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,24 +26,24 @@ public class ClubService {
         this.eventRepository = eventRepository;
     }
 
-    public void addClub(Club club) {
+    public void addClub(ClubRecord club) {
         clubRepository.save(club);
     }
 
-    public List<Club> getAllClubs() {
+    public List<ClubRecord> getAllClubs() {
         return clubRepository.findAll();
     }
 
-    public Optional<Club> getClub(int id) {
+    public Optional<ClubRecord> getClub(int id) {
         return clubRepository.findById(id);
     }
 
     public ResponseEntity<Object> deleteClub(int id) {
-        Optional<Club> club = getClub(id);
+        Optional<ClubRecord> club = getClub(id);
         if (club.isPresent()) {
             clubRepository.deleteById(id);
-            List<Event> events = eventRepository.findByClubId(id);
-            for (Event e : events) {
+            List<EventRecord> events = eventRepository.findByClubId(id);
+            for (EventRecord e : events) {
                 eventRepository.deleteById(e.getId());
             }
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -53,9 +52,9 @@ public class ClubService {
         }
     }
 
-    public ResponseEntity<Object> updateClub(int id, Club newClub){
-        List<Event> events = eventRepository.findByClubId(id);
-        for (Event e : events){
+    public ResponseEntity<Object> updateClub(int id, ClubRecord newClub){
+        List<EventRecord> events = eventRepository.findByClubId(id);
+        for (EventRecord e : events){
             if (colisionWithOpeningHours(newClub, e)){
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             }
@@ -69,7 +68,7 @@ public class ClubService {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    public boolean colisionWithOpeningHours(Club club, Event event){
+    public boolean colisionWithOpeningHours(ClubRecord club, EventRecord event){
         DayOfTheWeek eventDay = event.getDayOfTheWeek();
         LocalTime startEvent = event.getTime();
         LocalTime endEvent = startEvent.plus(event.getDuration());

@@ -1,5 +1,8 @@
-package com.jwzp_kr_kj.core;
+package com.jwzp_kr_kj.models.records;
 
+
+import com.jwzp_kr_kj.models.DayOfTheWeek;
+import com.jwzp_kr_kj.models.OpeningHours;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -8,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity(name="clubs")
-public class Club {
+public class ClubRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,14 +22,14 @@ public class Club {
     @ElementCollection
     public Map<DayOfTheWeek, OpeningHours> whenOpen;
 
-    public Club() {
+    public ClubRecord() {
         id = 0;
         name = "";
         address = "";
         whenOpen = new HashMap<>();
     }
 
-    public Club(int id, String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
+    public ClubRecord(int id, String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
         this.id = id;
         this.name = name;
         this.address = address;

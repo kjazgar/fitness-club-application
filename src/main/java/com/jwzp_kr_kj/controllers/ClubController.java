@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.jwzp_kr_kj.core.Club;
-import com.jwzp_kr_kj.core.DayOfTheWeek;
+import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.services.ClubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class ClubController {
 
     @GetMapping("/clubs")
     public ResponseEntity<String> printClubs() throws JsonProcessingException {
-        List<Club> allClubs = clubService.getAllClubs();
+        List<ClubRecord> allClubs = clubService.getAllClubs();
         String json = ow.writeValueAsString(allClubs);
         return ResponseEntity.ok(json);
     }
@@ -41,14 +40,14 @@ public class ClubController {
     }
 
     @PostMapping(path = "/clubs")
-    public ResponseEntity<HttpStatus> addClub(@RequestBody Club club) {
+    public ResponseEntity<HttpStatus> addClub(@RequestBody ClubRecord club) {
         clubService.addClub(club);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping(path = "/clubs/{id}")
-    public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody Club newClub) {
-        Optional<Club> updatedClub = clubService.getClub(id);
+    public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubRecord newClub) {
+        Optional<ClubRecord> updatedClub = clubService.getClub(id);
         if (updatedClub.isPresent()) {
             return clubService.updateClub(id, newClub);
         } else {

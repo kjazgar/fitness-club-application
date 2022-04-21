@@ -1,7 +1,4 @@
-package com.jwzp_kr_kj.core;
-
-import javax.persistence.*;
-import java.io.Serializable;
+package com.jwzp_kr_kj.models;
 
 public enum DayOfTheWeek {
     MONDAY,

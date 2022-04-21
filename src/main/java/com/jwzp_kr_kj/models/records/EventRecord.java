@@ -1,7 +1,8 @@
-package com.jwzp_kr_kj.core;
+package com.jwzp_kr_kj.models.records;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jwzp_kr_kj.models.DayOfTheWeek;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -9,7 +10,7 @@ import java.time.LocalTime;
 
 
 @Entity(name="events")
-public class Event {
+public class EventRecord {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private final int id;
@@ -22,7 +23,7 @@ public class Event {
     private int coachId;
     private int clubId;
 
-    public Event() {
+    public EventRecord() {
         this.id = 0;
         this.title = "";
         this.dayOfTheWeek = null;
@@ -32,7 +33,7 @@ public class Event {
         this.clubId = 0;
     }
 
-    public Event(int id, String name, DayOfTheWeek day, LocalTime time, Duration duration, int coachId, int clubId) {
+    public EventRecord(int id, String name, DayOfTheWeek day, LocalTime time, Duration duration, int coachId, int clubId) {
         this.id = id;
         this.title = name;
         this.dayOfTheWeek = day;

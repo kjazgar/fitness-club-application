@@ -1,6 +1,6 @@
 package com.jwzp_kr_kj.controllers;
 
-import com.jwzp_kr_kj.core.Event;
+import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public class EventController {
     }
 
     @PostMapping (value = "/events", consumes = "application/json")
-    public ResponseEntity<Object> addEvent(@RequestBody Event event){
+    public ResponseEntity<Object> addEvent(@RequestBody EventRecord event){
         return eventService.addEvent(event);
     }
 
@@ -32,7 +32,7 @@ public class EventController {
 
     @GetMapping("/events/{id}")
     public ResponseEntity<?> printEventWithId(@PathVariable int id){
-        Optional<Event> event = eventService.getEvent(id);
+        Optional<EventRecord> event = eventService.getEvent(id);
         if(event.isPresent()){
             return ResponseEntity.ok(eventService.getEvent(id));
         } else {
@@ -42,19 +42,19 @@ public class EventController {
 
     @GetMapping(value = "/events", params = "coachId")
     public ResponseEntity<?> printAllEventsByTheCoach(@RequestParam("coachId") int coachId){
-        List<Event> events = eventService.getEventsByCoach(coachId);
+        List<EventRecord> events = eventService.getEventsByCoach(coachId);
         return ResponseEntity.ok(events);
     }
 
     @GetMapping(value = "/events", params = "clubId")
     public ResponseEntity<?> printAllEventsByTheClub(@RequestParam("clubId") int clubId){
-        List<Event> events = eventService.getEventsByClub(clubId);
+        List<EventRecord> events = eventService.getEventsByClub(clubId);
         return ResponseEntity.ok(events);
     }
 
     @PatchMapping(path = "/events/{id}")
-    public ResponseEntity<Object> updateEvent(@PathVariable int id, @RequestBody Event newEvent) {
-        Optional<Event> updatedEvent = eventService.getEvent(id);
+    public ResponseEntity<Object> updateEvent(@PathVariable int id, @RequestBody EventRecord newEvent) {
+        Optional<EventRecord> updatedEvent = eventService.getEvent(id);
         if (updatedEvent.isPresent()) {
             return eventService.updateEvent(id, newEvent);
         } else {

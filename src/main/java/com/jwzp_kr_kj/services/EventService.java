@@ -1,8 +1,8 @@
 package com.jwzp_kr_kj.services;
 
-import com.jwzp_kr_kj.core.Club;
-import com.jwzp_kr_kj.core.Coach;
-import com.jwzp_kr_kj.core.Event;
+import com.jwzp_kr_kj.models.records.ClubRecord;
+import com.jwzp_kr_kj.models.records.CoachRecord;
+import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.repos.ClubRepository;
 import com.jwzp_kr_kj.repos.CoachRepository;
 import com.jwzp_kr_kj.repos.EventRepository;
@@ -28,11 +28,11 @@ public class EventService {
         this.coachRepository = coachRepository;
     }
 
-    public boolean checkEventConditions(Event event){
+    public boolean checkEventConditions(EventRecord event){
         int clubId = event.getClubId();
         int coachId = event.getCoachId();
-        Optional<Club> club = clubRepository.findById(clubId);
-        Optional<Coach> coach = coachRepository.findById(coachId);
+        Optional<ClubRecord> club = clubRepository.findById(clubId);
+        Optional<CoachRecord> coach = coachRepository.findById(coachId);
 
         if(event.getDuration().toMinutes() > 1440){
             return false;
@@ -45,7 +45,7 @@ public class EventService {
         return club.get().isWithinClubOpeningHours(event.getDayOfTheWeek(), event.getTime(), event.getDuration());
     }
 
-    public ResponseEntity<Object> addEvent(Event event){
+    public ResponseEntity<Object> addEvent(EventRecord event){
         if(checkEventConditions(event)){
             eventRepository.save(event);
 
@@ -56,7 +56,7 @@ public class EventService {
     }
 
     public ResponseEntity<Object> deleteEvent(int id) {
-        Optional<Event> event = getEvent(id);
+        Optional<EventRecord> event = getEvent(id);
         if (event.isPresent()) {
             eventRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -65,7 +65,7 @@ public class EventService {
         }
     }
 
-    public ResponseEntity<Object> updateEvent(int id, Event newEvent){
+    public ResponseEntity<Object> updateEvent(int id, EventRecord newEvent){
         if(checkEventConditions(newEvent)){
             eventRepository.findById(id).map(event -> {
                 event.setTitle(newEvent.getTitle());
@@ -82,19 +82,19 @@ public class EventService {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    public List<Event> getAllEvents() {
+    public List<EventRecord> getAllEvents() {
         return eventRepository.findAll();
     }
 
-    public Optional<Event> getEvent(int id) {
+    public Optional<EventRecord> getEvent(int id) {
         return eventRepository.findById(id);
     }
 
-    public List<Event> getEventsByCoach(int coachId){
+    public List<EventRecord> getEventsByCoach(int coachId){
         return eventRepository.findByCoachId(coachId);
     }
 
-    public List<Event> getEventsByClub(int clubId){
+    public List<EventRecord> getEventsByClub(int clubId){
         return eventRepository.findByClubId(clubId);
     }
 }
