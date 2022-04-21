@@ -7,12 +7,16 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.services.ClubService;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.hateoas.Link;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RestController
@@ -29,7 +33,12 @@ public class ClubController {
     @GetMapping("/clubs")
     public ResponseEntity<String> printClubs() throws JsonProcessingException {
         List<ClubRecord> allClubs = clubService.getAllClubs();
-        String json = ow.writeValueAsString(allClubs);
+        for(ClubRecord club : allClubs){
+            club.add(linkTo(ClubController.class).slash(club.id).withSelfRel());
+        }
+        Link link = linkTo(ClubController.class).withSelfRel();
+        CollectionModel<ClubRecord> result = CollectionModel.of(allClubs,link);
+        String json = ow.writeValueAsString(result);
         return ResponseEntity.ok(json);
     }
 
