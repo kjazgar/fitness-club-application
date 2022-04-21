@@ -2,6 +2,8 @@ package com.jwzp_kr_kj.controllers;
 
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.services.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,11 @@ public class EventController {
     @PostMapping (value = "/events", consumes = "application/json")
     public ResponseEntity<Object> addEvent(@RequestBody EventRecord event){
         return eventService.addEvent(event);
+    }
+
+    @GetMapping("/events/page")
+    public Page<EventRecord> getAll(Pageable p){
+        return eventService.getPage(p);
     }
 
     @GetMapping("/events")
