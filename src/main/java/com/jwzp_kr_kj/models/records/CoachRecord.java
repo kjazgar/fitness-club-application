@@ -25,6 +25,13 @@ public class CoachRecord {
         this.yearOfBirth = 0;
     }
 
+    public CoachRecord(String name, String surname, int yearOfBirth) {
+        this.id = -1;
+        this.firstName = name;
+        this.lastName = surname;
+        this.yearOfBirth = yearOfBirth;
+    }
+
     public CoachRecord(int id, String name, String surname, int yearOfBirth) {
         this.id = id;
         this.firstName = name;

@@ -34,8 +34,8 @@ public class CoachControllerTest {
     @Test
     public void getAllCoachesTest() throws JsonProcessingException {
         List<CoachRecord> coaches = List.of(
-                new CoachRecord(0, "Ygrek", "Iksinski", 1990),
-                new CoachRecord(1, "Ktos", "Fajny", 1993)
+                new CoachRecord("Ygrek", "Iksinski", 1990),
+                new CoachRecord("Ktos", "Fajny", 1993)
         );
         Mockito.when(coachService.getAllCoaches()).thenReturn(coaches);
         var result = new CoachController(coachService).printCoaches();

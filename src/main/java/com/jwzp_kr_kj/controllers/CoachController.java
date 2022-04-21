@@ -3,6 +3,7 @@ package com.jwzp_kr_kj.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.jwzp_kr_kj.models.data.CoachData;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.services.CoachService;
 import org.springframework.http.HttpStatus;
@@ -38,16 +39,16 @@ public class CoachController {
     }
 
     @PostMapping(path = "/coaches")
-    public ResponseEntity<HttpStatus> addCoach(@RequestBody CoachRecord coach) {
+    public ResponseEntity<HttpStatus> addCoach(@RequestBody CoachData coach) {
         coachService.addCoach(coach);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping(path = "/coaches/{id}")
-    public ResponseEntity<Object> updateCoach(@PathVariable int id, @RequestBody CoachRecord newCoach) {
+    public ResponseEntity<Object> updateCoach(@PathVariable int id, @RequestBody CoachData newCoach) {
         Optional<CoachRecord> updatedCoach = coachService.getCoach(id);
         if (updatedCoach.isPresent()) {
-            return coachService.updateCoach(id,newCoach);
+            return coachService.updateCoach(id, newCoach);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
