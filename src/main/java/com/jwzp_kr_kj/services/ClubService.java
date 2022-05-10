@@ -6,6 +6,8 @@ import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.repos.ClubRepository;
 import com.jwzp_kr_kj.repos.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -66,6 +68,10 @@ public class ClubService {
             return clubRepository.save(club);
         });
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public Page<ClubRecord> getPage(Pageable p){
+        return clubRepository.findAll(p);
     }
 
     public boolean colisionWithOpeningHours(ClubRecord club, EventRecord event){

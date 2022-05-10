@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jwzp_kr_kj.models.data.CoachData;
+import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.services.CoachService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +39,11 @@ public class CoachController {
     public ResponseEntity<String> printCoachWithId(@PathVariable int id) throws JsonProcessingException {
         String json = ow.writeValueAsString(coachService.getCoach(id));
         return ResponseEntity.ok(json);
+    }
+
+    @GetMapping("/coaches/page")
+    public Page<CoachRecord> getAll(Pageable p){
+        return coachService.getPage(p);
     }
 
     @PostMapping(path = "/coaches")

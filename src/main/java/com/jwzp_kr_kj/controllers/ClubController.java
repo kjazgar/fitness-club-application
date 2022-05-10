@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jwzp_kr_kj.models.records.ClubRecord;
+import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.services.ClubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +40,11 @@ public class ClubController {
     public ResponseEntity<String> printClubWithId(@PathVariable int id) throws JsonProcessingException {
         String json = ow.writeValueAsString(clubService.getClub(id));
         return ResponseEntity.ok(json);
+    }
+
+    @GetMapping("/clubs/page")
+    public Page<ClubRecord> getAll(Pageable p){
+        return clubService.getPage(p);
     }
 
     @PostMapping(path = "/clubs")
