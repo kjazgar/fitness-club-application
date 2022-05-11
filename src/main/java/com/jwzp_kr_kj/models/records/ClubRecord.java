@@ -30,6 +30,13 @@ public class ClubRecord extends RepresentationModel<ClubRecord> {
         whenOpen = new HashMap<>();
     }
 
+    public ClubRecord(String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
+        this.id = -1;
+        this.name = name;
+        this.address = address;
+        this.whenOpen = whenOpen;
+    }
+
     public ClubRecord(int id, String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
         this.id = id;
         this.name = name;

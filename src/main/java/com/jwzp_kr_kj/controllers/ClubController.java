@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jwzp_kr_kj.models.data.ClubData;
 import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.services.ClubService;
 import org.springframework.hateoas.CollectionModel;
@@ -49,13 +50,12 @@ public class ClubController {
     }
 
     @PostMapping(path = "/clubs")
-    public ResponseEntity<HttpStatus> addClub(@RequestBody ClubRecord club) {
-        clubService.addClub(club);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> addClub(@RequestBody ClubData club) {
+        return clubService.addClub(club);
     }
 
     @PatchMapping(path = "/clubs/{id}")
-    public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubRecord newClub) {
+    public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubData newClub) {
         Optional<ClubRecord> updatedClub = clubService.getClub(id);
         if (updatedClub.isPresent()) {
             return clubService.updateClub(id, newClub);
@@ -65,7 +65,7 @@ public class ClubController {
     }
 
     @DeleteMapping(path = "/clubs/{id}")
-    public ResponseEntity<Object> deleteClub(@PathVariable(value = "id") int id) {
+    public ResponseEntity<?> deleteClub(@PathVariable(value = "id") int id) {
         return clubService.deleteClub(id);
     }
 }
