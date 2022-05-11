@@ -73,7 +73,7 @@ public class ClubService {
         }
     }
 
-    public ResponseEntity<Object> updateClub(int id, ClubData newClub) {
+    public ResponseEntity<Object> updateClub(int id, ClubRecord newClub) {
         List<EventRecord> events = eventRepository.findByClubId(id);
         for (EventRecord e : events) {
             if (colisionWithOpeningHours(newClub, e)) {

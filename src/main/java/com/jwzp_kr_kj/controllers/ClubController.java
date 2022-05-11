@@ -63,7 +63,7 @@ public class ClubController {
     }
 
     @PatchMapping(path = "/clubs/{id}")
-    public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubData newClub) {
+    public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubRecord newClub) {
         Optional<ClubRecord> updatedClub = clubService.getClub(id);
         if (updatedClub.isPresent()) {
             return clubService.updateClub(id, newClub);
