@@ -10,11 +10,15 @@ public class Logs {
         return "All: " + type;
     }
 
+    static public String logNotAccepted(Class type){
+        return "Something is wrong: " + type;
+    }
+
     static public String logGetById(Class type, int id){
         return "Find by id : " + type + " with id: " + id;
     }
-    static public String logSaved(Object saved, int id) {
-        return "Saved: " + saved.getClass() + " id: " + id;
+    static public String logAdded(Object saved, int id) {
+        return "Added: " + saved.getClass() + " id: " + id;
     }
 
     static public String logDeleted(Object deleted, int id) {

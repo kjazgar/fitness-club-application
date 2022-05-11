@@ -2,7 +2,6 @@ package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.Logs;
 import com.jwzp_kr_kj.models.data.CoachData;
-import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.repos.CoachRepository;
@@ -37,10 +36,10 @@ public class CoachService {
         CoachRecord newCoach = new CoachRecord(coach.firstName, coach.lastName, coach.yearOfBirth);
         try{
             var savedCoach = coachRepository.save(newCoach);
-            logger.info(Logs.logSaved(savedCoach, savedCoach.id));
+            logger.info(Logs.logAdded(savedCoach, savedCoach.id));
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (IllegalArgumentException e) {
-            logger.info(Logs.logException(e));
+            logger.error(Logs.logException(e));
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
@@ -58,7 +57,7 @@ public class CoachService {
             logger.info(Logs.logDeleted(deletedCoach, deletedCoach.id));
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
-            logger.info(Logs.logNotFound(CoachRecord.class, id));
+            logger.error(Logs.logNotFound(CoachRecord.class, id));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -71,7 +70,7 @@ public class CoachService {
             logger.info(Logs.logUpdated(updated, updated.id));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-        logger.info(Logs.logNotFound(CoachRecord.class, id));
+        logger.error(Logs.logNotFound(CoachRecord.class, id));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 

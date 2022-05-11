@@ -37,7 +37,7 @@ public class ClubService {
         ClubRecord newClub = new ClubRecord(club.name, club.address, club.whenOpen);
         try {
             var savedClub = clubRepository.save(newClub);
-            logger.info(Logs.logSaved(savedClub, savedClub.id));
+            logger.info(Logs.logAdded(savedClub, savedClub.id));
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e) {
             logger.info(Logs.logException(e));
