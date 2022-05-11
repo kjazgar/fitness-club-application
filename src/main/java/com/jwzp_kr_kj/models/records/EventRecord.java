@@ -6,6 +6,7 @@ import com.jwzp_kr_kj.models.DayOfTheWeek;
 
 import javax.persistence.*;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 
@@ -30,7 +31,6 @@ public class EventRecord {
         this.time = null;
         this.duration = Duration.ZERO;
         this.coachId = 0;
-        this.clubId = 0;
     }
 
     public EventRecord(int id, String name, DayOfTheWeek day, LocalTime time, Duration duration, int coachId, int clubId) {
