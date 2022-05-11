@@ -39,9 +39,8 @@ public class CoachController {
     }
 
     @PostMapping(path = "/coaches")
-    public ResponseEntity<HttpStatus> addCoach(@RequestBody CoachData coach) {
-        coachService.addCoach(coach);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> addCoach(@RequestBody CoachData coach) {
+        return coachService.addCoach(coach);
     }
 
     @PatchMapping(path = "/coaches/{id}")

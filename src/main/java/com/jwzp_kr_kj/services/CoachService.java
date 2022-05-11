@@ -1,5 +1,6 @@
 package com.jwzp_kr_kj.services;
 
+import com.jwzp_kr_kj.Logs;
 import com.jwzp_kr_kj.models.data.CoachData;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.models.records.EventRecord;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.Optional;
 @Service
 public class CoachService {
 
+    private final Logger logger = LogManager.getLogger(CoachService.class);
     public CoachRepository coachRepository;
     public EventRepository eventRepository;
 
@@ -26,21 +30,32 @@ public class CoachService {
         this.eventRepository = eventRepository;
     }
 
-    public void addCoach(CoachData coach) {
+    public ResponseEntity<CoachRecord> addCoach(CoachData coach) {
         CoachRecord newCoach = new CoachRecord(coach.firstName, coach.lastName, coach.yearOfBirth);
-        coachRepository.save(newCoach);
+        try{
+            var savedCoach = coachRepository.save(newCoach);
+            logger.info(Logs.logSaved(savedCoach, savedCoach.id));
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (IllegalArgumentException e) {
+            logger.info(Logs.logException(e));
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+
     }
 
     public ResponseEntity<Object> deleteCoach(int id) {
         Optional<CoachRecord> coach = getCoach(id);
         if (coach.isPresent()) {
+            CoachRecord deletedCoach = coach.get();
             coachRepository.deleteById(id);
             List<EventRecord> events = eventRepository.findByCoachId(id);
             for (EventRecord e : events) {
                 eventRepository.deleteById(e.getId());
             }
+            logger.info(Logs.logDeleted(deletedCoach, deletedCoach.id));
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
+            logger.info(Logs.logNotFound(CoachRecord.class, id));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -49,8 +64,11 @@ public class CoachService {
         Optional<CoachRecord> toUpdate = coachRepository.findById(id);
         if (toUpdate.isPresent()) {
             CoachRecord updated = new CoachRecord(id, newCoach.firstName, newCoach.lastName, newCoach.yearOfBirth);
+            coachRepository.save(updated);
+            logger.info(Logs.logUpdated(updated, updated.id));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+        logger.info(Logs.logNotFound(CoachRecord.class, id));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
@@ -75,10 +93,12 @@ public class CoachService {
     }
 
     public List<CoachRecord> getAllCoaches() {
+        logger.info(Logs.logGetAll(CoachRecord.class));
         return coachRepository.findAll();
     }
 
     public Optional<CoachRecord> getCoach(int id) {
+        logger.info(Logs.logGetById(CoachRecord.class, id));
         return coachRepository.findById(id);
     }
 }
