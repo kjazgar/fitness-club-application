@@ -2,11 +2,14 @@ package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.Logs;
 import com.jwzp_kr_kj.models.data.CoachData;
+import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.repos.CoachRepository;
 import com.jwzp_kr_kj.repos.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -70,6 +73,10 @@ public class CoachService {
         }
         logger.info(Logs.logNotFound(CoachRecord.class, id));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    public Page<CoachRecord> getPage(Pageable p){
+        return coachRepository.findAll(p);
     }
 
     public boolean coachIsAvailable(int id, EventRecord newEvent) {

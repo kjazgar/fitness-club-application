@@ -2,6 +2,8 @@ package com.jwzp_kr_kj.controllers;
 
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.services.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,11 @@ public class EventController {
         return eventService.addEvent(event);
     }
 
+    @GetMapping("/events/page")
+    public Page<EventRecord> getAll(Pageable p){
+        return eventService.getPage(p);
+    }
+
     @GetMapping("/events")
     public ResponseEntity<?> printEvents(){
         return ResponseEntity.ok(eventService.getAllEvents());
@@ -34,7 +41,7 @@ public class EventController {
     public ResponseEntity<?> printEventWithId(@PathVariable int id){
         Optional<EventRecord> event = eventService.getEvent(id);
         if(event.isPresent()){
-            return ResponseEntity.ok(eventService.getEvent(id));
+            return ResponseEntity.ok(event);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
