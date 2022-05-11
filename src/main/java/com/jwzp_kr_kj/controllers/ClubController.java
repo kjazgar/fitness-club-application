@@ -5,17 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jwzp_kr_kj.models.data.ClubData;
 import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.services.ClubService;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.hateoas.Link;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RestController
@@ -32,7 +37,12 @@ public class ClubController {
     @GetMapping("/clubs")
     public ResponseEntity<String> printClubs() throws JsonProcessingException {
         List<ClubRecord> allClubs = clubService.getAllClubs();
-        String json = ow.writeValueAsString(allClubs);
+        for(ClubRecord club : allClubs){
+            club.add(linkTo(ClubController.class).slash(club.id).withSelfRel());
+        }
+        Link link = linkTo(ClubController.class).withSelfRel();
+        CollectionModel<ClubRecord> result = CollectionModel.of(allClubs,link);
+        String json = ow.writeValueAsString(result);
         return ResponseEntity.ok(json);
     }
 
@@ -48,13 +58,12 @@ public class ClubController {
     }
 
     @PostMapping(path = "/clubs")
-    public ResponseEntity<HttpStatus> addClub(@RequestBody ClubRecord club) {
-        clubService.addClub(club);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> addClub(@RequestBody ClubData club) {
+        return clubService.addClub(club);
     }
 
     @PatchMapping(path = "/clubs/{id}")
-    public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubRecord newClub) {
+    public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubData newClub) {
         Optional<ClubRecord> updatedClub = clubService.getClub(id);
         if (updatedClub.isPresent()) {
             return clubService.updateClub(id, newClub);
@@ -64,7 +73,7 @@ public class ClubController {
     }
 
     @DeleteMapping(path = "/clubs/{id}")
-    public ResponseEntity<Object> deleteClub(@PathVariable(value = "id") int id) {
+    public ResponseEntity<?> deleteClub(@PathVariable(value = "id") int id) {
         return clubService.deleteClub(id);
     }
 }

@@ -3,6 +3,7 @@ package com.jwzp_kr_kj.models.records;
 
 import com.jwzp_kr_kj.models.DayOfTheWeek;
 import com.jwzp_kr_kj.models.OpeningHours;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity(name="clubs")
-public class ClubRecord {
+public class ClubRecord extends RepresentationModel<ClubRecord> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,6 +28,13 @@ public class ClubRecord {
         name = "";
         address = "";
         whenOpen = new HashMap<>();
+    }
+
+    public ClubRecord(String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
+        this.id = -1;
+        this.name = name;
+        this.address = address;
+        this.whenOpen = whenOpen;
     }
 
     public ClubRecord(int id, String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
