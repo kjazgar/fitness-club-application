@@ -23,8 +23,8 @@ import java.util.Optional;
 public class CoachService {
 
     private final Logger logger = LogManager.getLogger(CoachService.class);
-    public CoachRepository coachRepository;
-    public EventRepository eventRepository;
+    public final CoachRepository coachRepository;
+    public final EventRepository eventRepository;
 
     @Autowired
     public CoachService(CoachRepository coachRepository, EventRepository eventRepository) {
@@ -69,9 +69,10 @@ public class CoachService {
             coachRepository.save(updated);
             logger.info(Logs.logUpdated(updated, updated.id));
             return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            logger.error(Logs.logNotFound(CoachRecord.class, id));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        logger.error(Logs.logNotFound(CoachRecord.class, id));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     public Page<CoachRecord> getPage(Pageable p){
@@ -87,9 +88,9 @@ public class CoachService {
             LocalTime endEvent = startEvent.plus(e.getDuration());
             if (startNewEvent.isAfter(endNewEvent) && startEvent.isAfter(endEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek())) {
                 return false;
-            } else if (startNewEvent.isAfter(endNewEvent) && ((endEvent.isAfter(startNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || (startEvent.isBefore(endNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek().next()))))) {
+            } else if (startNewEvent.isAfter(endNewEvent) && (endEvent.isAfter(startNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || startEvent.isBefore(endNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek().next()))) {
                 return false;
-            } else if (startEvent.isAfter(endNewEvent) && ((endNewEvent.isAfter(startEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || (startNewEvent.isBefore(endEvent) && newEvent.getDayOfTheWeek().equals(e.getDayOfTheWeek().next()))))) {
+            } else if (startEvent.isAfter(endNewEvent) && (endNewEvent.isAfter(startEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || startNewEvent.isBefore(endEvent) && newEvent.getDayOfTheWeek().equals(e.getDayOfTheWeek().next()))) {
                 return false;
             } else if (endEvent.isAfter(startEvent) && endNewEvent.isAfter(startNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek())) {
                 return (startEvent.isAfter(endNewEvent) || endEvent.isBefore(startNewEvent));
