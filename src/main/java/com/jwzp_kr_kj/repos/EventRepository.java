@@ -27,6 +27,6 @@ public interface EventRepository extends JpaRepository<EventRecord, Integer>, Pa
     List<EventRecord> getSchedule();
 
     @Query(value = "select e from events e where e.dayOfTheWeek = ?1")
-    List<EventRecord> getScheduleForADay(String day);
+    List<EventRecord> getScheduleForADay(DayOfTheWeek day);
 
 }

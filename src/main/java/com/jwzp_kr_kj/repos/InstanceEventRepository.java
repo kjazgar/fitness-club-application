@@ -17,10 +17,13 @@ import java.util.List;
 @Repository
 public interface InstanceEventRepository extends JpaRepository<InstanceEventRecord, Integer> {
 
+    @Query("select e from instanceEvents e where e.eventId = ?1")
+    InstanceEventRecord selectInstanceEventById(int id);
+
     @Query("DELETE FROM instanceEvents e WHERE e.date < ?1")
     List<EventRecord> archiveAllOlderThanMonth(LocalDate date);
 
-    @Query(value = "insert into instanceEvents e values (?1, ?2)", nativeQuery = true)
-    void addData(int eventId, String time);
+    @Query(value = "insert into instanceEvents e values (?1, ?2, ?3)", nativeQuery = true)
+    void addData(int eventId, String time, int limit);
 
 }
