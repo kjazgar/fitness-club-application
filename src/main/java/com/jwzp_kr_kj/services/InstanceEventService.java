@@ -48,13 +48,14 @@ public class InstanceEventService {
     }
 
     //@Scheduled(cron = "0 0 0 * * *")
-    @Scheduled(cron = "0 22,23,24,25,26,27,28,29,30 * * * *")
+    @Scheduled(cron = "0 48,49,50,51,52 * * * *")
     public void automaticallyCreateEvents() {
         logger.info("Run automaticallyCreateEvents");
         LocalDate current = LocalDate.now();
         LocalDate dateInMonth = current.plusDays(30);
         DayOfWeek dayofTheWeekInMonth = dateInMonth.getDayOfWeek();
 
+        logger.info(dayOfTheWeekConverter(dayofTheWeekInMonth));
         List<EventRecord> scheduleForADay = eventRepository.getScheduleForADay(dayOfTheWeekConverter(dayofTheWeekInMonth));
         for(EventRecord event : scheduleForADay){
             addInstanceEvent(event.getId(), LocalDateTime.of(dateInMonth, event.getTime()).toString(), 30);
@@ -69,6 +70,33 @@ public class InstanceEventService {
         instanceEventRepository.addData(eventId, time, limit);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    public ResponseEntity<Object> registerForEvent(int id){
+        InstanceEventRecord instanceEventRecord = getInstanceEvent(id);
+
+        if(instanceEventRecord.occupied >= instanceEventRecord.limitOfParticipants){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+
+        instanceEventRecord.occupied += 1;
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public ResponseEntity<Object> cancelEvent(int id){
+        instanceEventRepository.cancelEventById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public ResponseEntity<Object> postponeEvent(int id, LocalDateTime date){
+        InstanceEventRecord instanceEventRecord = getInstanceEvent(id);
+        instanceEventRecord.date = date;
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public List<InstanceEventRecord> findEventByDateAndClub(LocalDateTime date, int clubId){
+        return instanceEventRepository.findEventByDateAndClub(date, clubId);
+    }
+
 
     private DayOfTheWeek dayOfTheWeekConverter(DayOfWeek dayOfWeek){
         switch (dayOfWeek.toString()){

@@ -21,9 +21,15 @@ public interface InstanceEventRepository extends JpaRepository<InstanceEventReco
     InstanceEventRecord selectInstanceEventById(int id);
 
     @Query("DELETE FROM instanceEvents e WHERE e.date < ?1")
-    List<EventRecord> archiveAllOlderThanMonth(LocalDate date);
+    void archiveAllOlderThanMonth(LocalDate date);
 
-    @Query(value = "insert into instanceEvents e values (?1, ?2, ?3)", nativeQuery = true)
+    @Query("DELETE FROM instanceEvents e WHERE e.id = ?1")
+    void cancelEventById(int id);
+
+    @Query(value = "insert into instanceEvents (eventId, time, limit) values (?1, ?2, ?3)", nativeQuery = true)
     void addData(int eventId, String time, int limit);
+
+    @Query("SELECT ie FROM instanceEvents ie LEFT JOIN events e ON ie.eventId = e.id WHERE ie.date = ?1 AND e.clubId = ?2" )
+    List<InstanceEventRecord> findEventByDateAndClub(LocalDateTime date, int clubId);
 
 }
