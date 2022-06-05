@@ -6,6 +6,7 @@ import com.jwzp_kr_kj.models.records.InstanceEventRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -26,7 +27,8 @@ public interface InstanceEventRepository extends JpaRepository<InstanceEventReco
     @Query("DELETE FROM instanceEvents e WHERE e.id = ?1")
     void cancelEventById(int id);
 
-    @Query(value = "insert into instanceEvents (eventId, time, limit) values (?1, ?2, ?3)", nativeQuery = true)
+    @Modifying
+    @Query(value = "insert into instanceEvents (EVENTID, DATE, LIMITOFPARTICIPANTS, OCCUPIED) values (?1, ?2, ?3, 0)", nativeQuery = true)
     void addData(int eventId, String time, int limit);
 
     @Query("SELECT ie FROM instanceEvents ie LEFT JOIN events e ON ie.eventId = e.id WHERE ie.date = ?1 AND e.clubId = ?2" )

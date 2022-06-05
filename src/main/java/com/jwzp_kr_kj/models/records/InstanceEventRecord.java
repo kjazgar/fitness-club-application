@@ -7,11 +7,15 @@ import java.time.LocalDateTime;
 @Table(name = "INSTANCEEVENTS")
 public class InstanceEventRecord {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private final int id;
+    @Column(name = "EVENTID")
     public int eventId;
+    @Column(name = "DATE")
     public LocalDateTime date;
+    @Column(name = "LIMITOFPARTICIPANTS")
     public int limitOfParticipants;
+    @Column(name = "OCCUPIED")
     public int occupied;
 
     public InstanceEventRecord(){

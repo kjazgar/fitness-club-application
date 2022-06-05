@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -39,7 +40,7 @@ public class InstanceEventService {
         return instanceEventRepository.findAll();
     }
 
-    //@Scheduled(cron = "0 0 0 * * *")
+    //@Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     public void automaticallyArchiveEvents() {
         LocalDate current = LocalDate.now();
@@ -47,8 +48,9 @@ public class InstanceEventService {
         instanceEventRepository.archiveAllOlderThanMonth(monthAgoDate);
     }
 
-    //@Scheduled(cron = "0 0 0 * * *")
-    @Scheduled(cron = "0 48,49,50,51,52 * * * *")
+    //@Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
     public void automaticallyCreateEvents() {
         logger.info("Run automaticallyCreateEvents");
         LocalDate current = LocalDate.now();
