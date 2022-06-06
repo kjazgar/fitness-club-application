@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 public class InstanceEventData {
-    public int eventId;
-    public LocalDateTime date;
+    private int eventId;
+    private LocalDateTime date;
 
     public InstanceEventData(){
         eventId = 0;
@@ -17,5 +17,21 @@ public class InstanceEventData {
     public InstanceEventData(int eventId, LocalDateTime dateTime){
         this.eventId = eventId;
         this.date = dateTime;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

@@ -38,7 +38,7 @@ public class ClubController {
     public ResponseEntity<String> printClubs() throws JsonProcessingException {
         List<ClubRecord> allClubs = clubService.getAllClubs();
         for(ClubRecord club : allClubs){
-            club.add(linkTo(ClubController.class).slash(club.id).withSelfRel());
+            club.add(linkTo(ClubController.class).slash(club.getId()).withSelfRel());
         }
         Link link = linkTo(ClubController.class).withSelfRel();
         CollectionModel<ClubRecord> result = CollectionModel.of(allClubs,link);

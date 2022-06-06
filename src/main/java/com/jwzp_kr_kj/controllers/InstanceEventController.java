@@ -49,10 +49,4 @@ public class InstanceEventController {
     public ResponseEntity<?> cancelEvent(@RequestParam LocalDateTime date, @RequestParam int clubId){
         return ResponseEntity.ok(instanceEventService.findEventByDateAndClub(date, clubId));
     }
-
-//    @PostMapping (value = "/events/assign", consumes = "application/json")
-//    public ResponseEntity<Object> assignForEvent(@RequestBody EventRecord event){
-//        InstanceEventRecord instanceEventRecord = instanceEventService.getInstanceEvent(event.getId());
-//
-//    }
 }

@@ -40,7 +40,7 @@ public class InstanceEventService {
         return instanceEventRepository.findAll();
     }
 
-    //@Scheduled(cron = "0 * * * * *")
+//    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     public void automaticallyArchiveEvents() {
         LocalDate current = LocalDate.now();
@@ -48,7 +48,7 @@ public class InstanceEventService {
         instanceEventRepository.archiveAllOlderThanMonth(monthAgoDate);
     }
 
-    //@Scheduled(cron = "0 * * * * *")
+//    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void automaticallyCreateEvents() {
@@ -76,7 +76,7 @@ public class InstanceEventService {
     public ResponseEntity<Object> registerForEvent(int id){
         InstanceEventRecord instanceEventRecord = getInstanceEvent(id);
 
-        if(instanceEventRecord.occupied >= instanceEventRecord.limitOfParticipants){
+        if(instanceEventRecord.getOccupied() >= instanceEventRecord.getLimitOfParticipants()){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
@@ -91,7 +91,7 @@ public class InstanceEventService {
 
     public ResponseEntity<Object> postponeEvent(int id, LocalDateTime date){
         InstanceEventRecord instanceEventRecord = getInstanceEvent(id);
-        instanceEventRecord.date = date;
+        instanceEventRecord.setDate(date);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

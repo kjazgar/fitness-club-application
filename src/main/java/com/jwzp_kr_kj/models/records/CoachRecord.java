@@ -12,11 +12,11 @@ public class CoachRecord {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    public final int id;
+    private final int id;
 
-    public String firstName;
-    public String lastName;
-    public int yearOfBirth;
+    private String firstName;
+    private String lastName;
+    private int yearOfBirth;
 
     public CoachRecord() {
         this.id = 0;
@@ -61,5 +61,9 @@ public class CoachRecord {
 
     public int getYearOfBirth() {
         return yearOfBirth;
+    }
+
+    public int getId() {
+        return id;
     }
 }

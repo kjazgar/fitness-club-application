@@ -34,10 +34,10 @@ public class CoachService {
     }
 
     public ResponseEntity<CoachRecord> addCoach(CoachData coach) {
-        CoachRecord newCoach = new CoachRecord(coach.firstName, coach.lastName, coach.yearOfBirth);
+        CoachRecord newCoach = new CoachRecord(coach.getFirstName(), coach.getLastName(), coach.getYearOfBirth());
         try{
             var savedCoach = coachRepository.save(newCoach);
-            logger.info(Logs.logSaved(savedCoach, savedCoach.id));
+            logger.info(Logs.logSaved(savedCoach, savedCoach.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (IllegalArgumentException e) {
             logger.info(Logs.logException(e));
@@ -55,7 +55,7 @@ public class CoachService {
             for (EventRecord e : events) {
                 eventRepository.deleteById(e.getId());
             }
-            logger.info(Logs.logDeleted(deletedCoach, deletedCoach.id));
+            logger.info(Logs.logDeleted(deletedCoach, deletedCoach.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             logger.info(Logs.logNotFound(CoachRecord.class, id));
@@ -66,9 +66,9 @@ public class CoachService {
     public ResponseEntity<Object> updateCoach(int id, CoachData newCoach) {
         Optional<CoachRecord> toUpdate = coachRepository.findById(id);
         if (toUpdate.isPresent()) {
-            CoachRecord updated = new CoachRecord(id, newCoach.firstName, newCoach.lastName, newCoach.yearOfBirth);
+            CoachRecord updated = new CoachRecord(id, newCoach.getFirstName(), newCoach.getLastName(), newCoach.getYearOfBirth());
             coachRepository.save(updated);
-            logger.info(Logs.logUpdated(updated, updated.id));
+            logger.info(Logs.logUpdated(updated, updated.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         logger.info(Logs.logNotFound(CoachRecord.class, id));

@@ -8,20 +8,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClubData {
-    public final String name;
-    public final String address;
+    private String name;
+    private String address;
     @ElementCollection
-    public Map<DayOfTheWeek, OpeningHours> whenOpen;
+    private Map<DayOfTheWeek, OpeningHours> whenOpen;
 
-    public ClubData() {
+    private ClubData() {
         name = "";
         address = "";
         whenOpen = new HashMap<>();
     }
 
-    public ClubData(String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
+    private ClubData(String name, String address, Map<DayOfTheWeek, OpeningHours> whenOpen) {
         this.name = name;
         this.address = address;
         this.whenOpen = whenOpen;
     }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setAddress(String address){
+        this.address = address;
+    }
+
+    public void setWhenOpen(Map<DayOfTheWeek, OpeningHours> whenOpen){
+        this.whenOpen = whenOpen;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String getAddress(){
+        return this.address;
+    }
+
+    public Map<DayOfTheWeek, OpeningHours> getWhenOpen(){
+        return this.whenOpen;
+    }
+
+
 }
