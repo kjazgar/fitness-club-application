@@ -2,7 +2,6 @@ package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.Logs;
 import com.jwzp_kr_kj.models.data.CoachData;
-import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.repos.CoachRepository;
@@ -24,8 +23,8 @@ import java.util.Optional;
 public class CoachService {
 
     private final Logger logger = LogManager.getLogger(CoachService.class);
-    public CoachRepository coachRepository;
-    public EventRepository eventRepository;
+    public final CoachRepository coachRepository;
+    public final EventRepository eventRepository;
 
     @Autowired
     public CoachService(CoachRepository coachRepository, EventRepository eventRepository) {
@@ -37,10 +36,10 @@ public class CoachService {
         CoachRecord newCoach = new CoachRecord(coach.getFirstName(), coach.getLastName(), coach.getYearOfBirth());
         try{
             var savedCoach = coachRepository.save(newCoach);
-            logger.info(Logs.logSaved(savedCoach, savedCoach.getId()));
+            logger.info(Logs.logAdded(savedCoach, savedCoach.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (IllegalArgumentException e) {
-            logger.info(Logs.logException(e));
+            logger.error(Logs.logException(e));
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
@@ -58,7 +57,7 @@ public class CoachService {
             logger.info(Logs.logDeleted(deletedCoach, deletedCoach.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
-            logger.info(Logs.logNotFound(CoachRecord.class, id));
+            logger.error(Logs.logNotFound(CoachRecord.class, id));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -70,9 +69,10 @@ public class CoachService {
             coachRepository.save(updated);
             logger.info(Logs.logUpdated(updated, updated.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            logger.error(Logs.logNotFound(CoachRecord.class, id));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        logger.info(Logs.logNotFound(CoachRecord.class, id));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     public Page<CoachRecord> getPage(Pageable p){
@@ -88,9 +88,9 @@ public class CoachService {
             LocalTime endEvent = startEvent.plus(e.getDuration());
             if (startNewEvent.isAfter(endNewEvent) && startEvent.isAfter(endEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek())) {
                 return false;
-            } else if (startNewEvent.isAfter(endNewEvent) && ((endEvent.isAfter(startNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || (startEvent.isBefore(endNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek().next()))))) {
+            } else if (startNewEvent.isAfter(endNewEvent) && (endEvent.isAfter(startNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || startEvent.isBefore(endNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek().next()))) {
                 return false;
-            } else if (startEvent.isAfter(endNewEvent) && ((endNewEvent.isAfter(startEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || (startNewEvent.isBefore(endEvent) && newEvent.getDayOfTheWeek().equals(e.getDayOfTheWeek().next()))))) {
+            } else if (startEvent.isAfter(endNewEvent) && (endNewEvent.isAfter(startEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || startNewEvent.isBefore(endEvent) && newEvent.getDayOfTheWeek().equals(e.getDayOfTheWeek().next()))) {
                 return false;
             } else if (endEvent.isAfter(startEvent) && endNewEvent.isAfter(startNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek())) {
                 return (startEvent.isAfter(endNewEvent) || endEvent.isBefore(startNewEvent));

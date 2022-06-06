@@ -37,7 +37,7 @@ public class ClubService {
         ClubRecord newClub = new ClubRecord(club.getName(), club.getAddress(), club.getWhenOpen());
         try {
             var savedClub = clubRepository.save(newClub);
-            logger.info(Logs.logSaved(savedClub, savedClub.getId()));
+            logger.info(Logs.logAdded(savedClub, savedClub.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e) {
             logger.info(Logs.logException(e));
@@ -73,7 +73,7 @@ public class ClubService {
         }
     }
 
-    public ResponseEntity<Object> updateClub(int id, ClubRecord newClub) {
+    public ResponseEntity<Object> updateClub(int id, ClubData newClub) {
         List<EventRecord> events = eventRepository.findByClubId(id);
         for (EventRecord e : events) {
             if (colisionWithOpeningHours(newClub, e)) {
@@ -95,7 +95,7 @@ public class ClubService {
         return clubRepository.findAll(p);
     }
 
-    public boolean colisionWithOpeningHours(ClubRecord club, EventRecord event){
+    public boolean colisionWithOpeningHours(ClubData club, EventRecord event){
         DayOfTheWeek eventDay = event.getDayOfTheWeek();
         LocalTime startEvent = event.getTime();
         LocalTime endEvent = startEvent.plus(event.getDuration());

@@ -1,12 +1,15 @@
 package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.models.DayOfTheWeek;
+import com.jwzp_kr_kj.Logs;
 import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.repos.ClubRepository;
 import com.jwzp_kr_kj.repos.CoachRepository;
 import com.jwzp_kr_kj.repos.EventRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +28,7 @@ import java.util.Optional;
 @Service
 public class EventService {
 
+    private final Logger logger = LogManager.getLogger(EventService.class);
     public EventRepository eventRepository;
     public ClubRepository clubRepository;
     public CoachRepository coachRepository;
@@ -56,19 +60,21 @@ public class EventService {
     public ResponseEntity<Object> addEvent(EventRecord event){
         if(checkEventConditions(event)){
             eventRepository.save(event);
-
+            logger.info(Logs.logAdded(event, event.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-
+        logger.error(Logs.logNotAccepted(EventRecord.class));
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     public ResponseEntity<Object> deleteEvent(int id) {
         Optional<EventRecord> event = getEvent(id);
         if (event.isPresent()) {
+            logger.info(Logs.logDeleted(EventRecord.class, id));
             eventRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
+            logger.error(Logs.logNotFound(EventRecord.class, id));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -84,9 +90,10 @@ public class EventService {
                 event.setClubId(newEvent.getClubId());
                 return eventRepository.save(event);
             });
+            logger.info(Logs.logUpdated(EventRecord.class, id));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-
+        logger.error(Logs.logNotAccepted(ClubRecord.class));
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 

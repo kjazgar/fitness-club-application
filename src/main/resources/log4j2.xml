@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+<Appenders>
+    <File name="MyFile" fileName="logs/app.log" immediateFlush="false">
+        <JSONLayout/>
+    </File>
+    <Console name="ConsoleAppender" target="SYSTEM_OUT">
+        <PatternLayout pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=pink, WARN=yellow bold, INFO=blue, DEBUG=green bold, TRACE=blue} %style{}{magenta} [%M] %style{%40C}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%xEx}" />
+    </Console>
+</Appenders>
+<Loggers>
+    <Root level="trace">
+        <AppenderRef ref="ConsoleAppender" level="info"/>
+        <AppenderRef ref="MyFile"/>
+    </Root>
+</Loggers>
+</Configuration>

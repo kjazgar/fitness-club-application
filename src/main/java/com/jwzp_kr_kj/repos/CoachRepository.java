@@ -1,6 +1,5 @@
 package com.jwzp_kr_kj.repos;
 
-import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface CoachRepository extends JpaRepository<CoachRecord, Integer>, PagingAndSortingRepository<CoachRecord, Integer> {
 
-    @Query(value = "select c from coaches c where c.id = ?1")
+    @Query(value = "select c from coaches c where c.id = :id")
     Optional<CoachRecord> findById(int id);
 
     Page<CoachRecord> findAll(Pageable pageable);

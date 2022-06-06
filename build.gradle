@@ -17,22 +17,23 @@ jar {
 }
 
 dependencies {
-	runtimeOnly 'com.h2database:h2:2.1.210'
-	implementation 'com.vladmihalcea:hibernate-types-52:2.15.1'
-	implementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
-	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
+	runtimeOnly 'com.h2database:h2:2.1.212'
+	implementation 'com.vladmihalcea:hibernate-types-52:2.16.2'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.5.9'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.8'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.0.1'
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.0.1'
+	runtimeOnly 'org.postgresql:postgresql'
 
 }
-
-
 
 tasks.named('test') {
 	useJUnitPlatform()
