@@ -76,7 +76,7 @@ public class InstanceEventService {
     public ResponseEntity<Object> registerForEvent(int id){
         InstanceEventRecord instanceEventRecord = getInstanceEvent(id);
 
-        if(instanceEventRecord.getOccupied() >= instanceEventRecord.getLimitOfParticipants()){
+        if(instanceEventRecord == null || instanceEventRecord.getOccupied() >= instanceEventRecord.getLimitOfParticipants()){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 

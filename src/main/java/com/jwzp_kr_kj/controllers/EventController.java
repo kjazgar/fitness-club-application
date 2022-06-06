@@ -24,22 +24,22 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @PostMapping (value = "/events", consumes = "application/json")
+    @PostMapping (value = "/v1/events", consumes = "application/json")
     public ResponseEntity<Object> addEvent(@RequestBody EventRecord event){
         return eventService.addEvent(event);
     }
 
-    @GetMapping("/events/page")
+    @GetMapping("/v1/events/page")
     public Page<EventRecord> getAll(Pageable p){
         return eventService.getPage(p);
     }
 
-    @GetMapping("/events")
+    @GetMapping("/v1/events")
     public ResponseEntity<?> printEvents(){
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
-    @GetMapping("/events/{id}")
+    @GetMapping("/v1/events/{id}")
     public ResponseEntity<?> printEventWithId(@PathVariable int id){
         Optional<EventRecord> event = eventService.getEvent(id);
         if(event.isPresent()){
@@ -49,19 +49,19 @@ public class EventController {
         }
     }
 
-    @GetMapping(value = "/events", params = "coachId")
+    @GetMapping(value = "/v1/events", params = "coachId")
     public ResponseEntity<?> printAllEventsByTheCoach(@RequestParam("coachId") int coachId){
         List<EventRecord> events = eventService.getEventsByCoach(coachId);
         return ResponseEntity.ok(events);
     }
 
-    @GetMapping(value = "/events", params = "clubId")
+    @GetMapping(value = "/v1/events", params = "clubId")
     public ResponseEntity<?> printAllEventsByTheClub(@RequestParam("clubId") int clubId){
         List<EventRecord> events = eventService.getEventsByClub(clubId);
         return ResponseEntity.ok(events);
     }
 
-    @PatchMapping(path = "/events/{id}")
+    @PatchMapping(path = "/v1/events/{id}")
     public ResponseEntity<Object> updateEvent(@PathVariable int id, @RequestBody EventRecord newEvent) {
         Optional<EventRecord> updatedEvent = eventService.getEvent(id);
         if (updatedEvent.isPresent()) {

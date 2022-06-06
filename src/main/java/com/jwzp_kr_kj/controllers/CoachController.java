@@ -25,35 +25,35 @@ public class CoachController {
         this.coachService = coachService;
     }
 
-    @GetMapping("/coaches")
+    @GetMapping("/v1/coaches")
     public ResponseEntity<Object> printCoaches() throws JsonProcessingException {
         List<CoachRecord> allCoaches = coachService.getAllCoaches();
         String json = ow.writeValueAsString(allCoaches);
         return ResponseEntity.ok(json);
     }
 
-    @GetMapping("/coaches/{id}")
+    @GetMapping("/v1/coaches/{id}")
     public ResponseEntity<String> printCoachWithId(@PathVariable int id) throws JsonProcessingException {
         String json = ow.writeValueAsString(coachService.getCoach(id));
         return ResponseEntity.ok(json);
     }
 
-    @GetMapping("/coaches/page")
+    @GetMapping("/v1/coaches/page")
     public Page<CoachRecord> getAll(Pageable p){
         return coachService.getPage(p);
     }
 
-    @PostMapping(path = "/coaches")
+    @PostMapping(path = "/v1/coaches")
     public ResponseEntity<CoachRecord> addCoach(@RequestBody CoachData coach) {
         return coachService.addCoach(coach);
     }
 
-    @PatchMapping(path = "/coaches/{id}")
+    @PatchMapping(path = "/v1/coaches/{id}")
     public ResponseEntity<Object> updateCoach(@PathVariable int id, @RequestBody CoachData newCoach) {
         return coachService.updateCoach(id, newCoach);
     }
 
-    @DeleteMapping("/coaches/{id}")
+    @DeleteMapping("/v1/coaches/{id}")
     public ResponseEntity<Object> deleteCoach(@PathVariable(value = "id") int id) {
         return coachService.deleteCoach(id);
     }

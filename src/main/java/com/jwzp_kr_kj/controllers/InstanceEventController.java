@@ -27,27 +27,27 @@ public class InstanceEventController {
         this.instanceEventService = instanceEventService;
     }
 
-    @GetMapping("/available_events")
+    @GetMapping("/v1/available_events")
     public ResponseEntity<?> printEvents(){
         return ResponseEntity.ok(instanceEventService.getAllInstanceEvents());
     }
 
-    @PostMapping("/register/{id}")
+    @PostMapping("/v1/register/{id}")
     public ResponseEntity<?> registerForEvent(@PathVariable int id){
         return instanceEventService.registerForEvent(id);
     }
 
-    @PostMapping("/cancel/{id}")
+    @PostMapping("/v1/cancel/{id}")
     public ResponseEntity<?> cancelEvent(@PathVariable int id){
         return instanceEventService.cancelEvent(id);
     }
 
-    @PostMapping(value = "/postpone/{id}", consumes = "application/json")
+    @PostMapping(value = "/v1/postpone/{id}", consumes = "application/json")
     public ResponseEntity<?> postponeEvent(@PathVariable int id, @RequestParam("date") @DateTimeFormat(pattern = "yyyy-dd-MM HH:mm:ss") LocalDateTime date){
         return instanceEventService.postponeEvent(id, date);
     }
 
-    @GetMapping("/find")
+    @GetMapping("/v1/find")
     public ResponseEntity<?> findEvent(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-dd-MM HH:mm:ss")  LocalDateTime date, @RequestParam("clubId") int clubId){
         return ResponseEntity.ok(instanceEventService.findEventByDateAndClub(date, clubId));
     }

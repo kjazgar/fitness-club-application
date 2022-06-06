@@ -31,7 +31,7 @@ public class ClubController {
         this.clubService = clubService;
     }
 
-    @GetMapping("/clubs")
+    @GetMapping("/v1/clubs")
     public ResponseEntity<String> printClubs() throws JsonProcessingException {
         List<ClubRecord> allClubs = clubService.getAllClubs();
         for(ClubRecord club : allClubs){
@@ -43,28 +43,28 @@ public class ClubController {
         return ResponseEntity.ok(json);
     }
 
-    @GetMapping("/clubs/{id}")
+    @GetMapping("/v1/clubs/{id}")
     public ResponseEntity<String> printClubWithId(@PathVariable int id) throws JsonProcessingException {
         String json = ow.writeValueAsString(clubService.getClub(id));
         return ResponseEntity.ok(json);
     }
 
-    @GetMapping("/clubs/page")
+    @GetMapping("/v1/clubs/page")
     public Page<ClubRecord> getAll(Pageable p){
         return clubService.getPage(p);
     }
 
-    @PostMapping(path = "/clubs")
+    @PostMapping(path = "/v1/clubs")
     public ResponseEntity<ClubRecord> addClub(@RequestBody ClubData club) {
         return clubService.addClub(club);
     }
 
-    @PatchMapping(path = "/clubs/{id}")
+    @PatchMapping(path = "/v1/clubs/{id}")
     public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubData newClub) {
         return clubService.updateClub(id, newClub);
     }
 
-    @DeleteMapping(path = "/clubs/{id}")
+    @DeleteMapping(path = "/v1/clubs/{id}")
     public ResponseEntity<ClubRecord> deleteClub(@PathVariable(value = "id") int id) {
         return clubService.deleteClub(id);
     }
