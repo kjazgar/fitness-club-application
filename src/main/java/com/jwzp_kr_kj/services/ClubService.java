@@ -34,10 +34,10 @@ public class ClubService {
     }
 
     public ResponseEntity<ClubRecord> addClub(ClubData club) {
-        ClubRecord newClub = new ClubRecord(club.name, club.address, club.whenOpen);
+        ClubRecord newClub = new ClubRecord(club.getName(), club.getAddress(), club.getWhenOpen());
         try {
             var savedClub = clubRepository.save(newClub);
-            logger.info(Logs.logAdded(savedClub, savedClub.id));
+            logger.info(Logs.logAdded(savedClub, savedClub.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e) {
             logger.info(Logs.logException(e));
@@ -65,7 +65,7 @@ public class ClubService {
             for (EventRecord e : events) {
                 eventRepository.deleteById(e.getId());
             }
-            logger.info(Logs.logDeleted(deletedClub, deletedClub.id));
+            logger.info(Logs.logDeleted(deletedClub, deletedClub.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             logger.info(Logs.logNotFound(ClubRecord.class, id));
@@ -82,9 +82,9 @@ public class ClubService {
         }
         Optional<ClubRecord> toUpdate = clubRepository.findById(id);
         if (toUpdate.isPresent()) {
-            ClubRecord updated = new ClubRecord(id, newClub.name, newClub.address, newClub.whenOpen);
+            ClubRecord updated = new ClubRecord(id, newClub.getName(), newClub.getAddress(), newClub.getWhenOpen());
             clubRepository.save(updated);
-            logger.info(Logs.logUpdated(updated, updated.id));
+            logger.info(Logs.logUpdated(updated, updated.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         logger.info(Logs.logNotFound(ClubRecord.class, id));
@@ -99,8 +99,8 @@ public class ClubService {
         DayOfTheWeek eventDay = event.getDayOfTheWeek();
         LocalTime startEvent = event.getTime();
         LocalTime endEvent = startEvent.plus(event.getDuration());
-        LocalTime clubHourFrom = club.whenOpen.get(eventDay).from;
-        LocalTime clubHourTo = club.whenOpen.get(eventDay).to;
+        LocalTime clubHourFrom = club.getWhenOpen().get(eventDay).from;
+        LocalTime clubHourTo = club.getWhenOpen().get(eventDay).to;
         if (startEvent.isAfter(endEvent)) {
             return !clubHourFrom.equals(clubHourTo);
         }

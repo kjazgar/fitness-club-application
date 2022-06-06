@@ -16,12 +16,12 @@ public class ClubRecord extends RepresentationModel<ClubRecord> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public final int id;
+    private final int id;
 
-    public String name;
-    public String address;
+    private String name;
+    private String address;
     @ElementCollection
-    public Map<DayOfTheWeek, OpeningHours> whenOpen;
+    private Map<DayOfTheWeek, OpeningHours> whenOpen;
 
     public ClubRecord() {
         id = 0;
@@ -42,6 +42,10 @@ public class ClubRecord extends RepresentationModel<ClubRecord> {
         this.name = name;
         this.address = address;
         this.whenOpen = whenOpen;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -76,5 +80,4 @@ public class ClubRecord extends RepresentationModel<ClubRecord> {
 
        return clubStartHour.compareTo(startHour) <= 0 && clubEndHour.compareTo(startHour) >= 0 && clubEndHour.compareTo(endHour) >= 0;
     }
-
 }
