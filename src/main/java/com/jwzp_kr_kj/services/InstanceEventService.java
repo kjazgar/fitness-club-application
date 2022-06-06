@@ -40,15 +40,15 @@ public class InstanceEventService {
         return instanceEventRepository.findAll();
     }
 
-//    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
     public void automaticallyArchiveEvents() {
-        LocalDate current = LocalDate.now();
-        LocalDate monthAgoDate = current.minusDays(30);
+        logger.info("Run automaticallyArchiveEvents");
+        LocalDateTime current = LocalDateTime.now();
+        LocalDateTime monthAgoDate = current.minusDays(30);
         instanceEventRepository.archiveAllOlderThanMonth(monthAgoDate);
     }
 
-//    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void automaticallyCreateEvents() {
@@ -57,7 +57,6 @@ public class InstanceEventService {
         LocalDate dateInMonth = current.plusDays(30);
         DayOfWeek dayofTheWeekInMonth = dateInMonth.getDayOfWeek();
 
-        logger.info(dayOfTheWeekConverter(dayofTheWeekInMonth));
         List<EventRecord> scheduleForADay = eventRepository.getScheduleForADay(dayOfTheWeekConverter(dayofTheWeekInMonth));
         for(EventRecord event : scheduleForADay){
             addInstanceEvent(event.getId(), LocalDateTime.of(dateInMonth, event.getTime()).toString(), 30);
@@ -73,6 +72,7 @@ public class InstanceEventService {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Transactional
     public ResponseEntity<Object> registerForEvent(int id){
         InstanceEventRecord instanceEventRecord = getInstanceEvent(id);
 
@@ -80,25 +80,25 @@ public class InstanceEventService {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
-        instanceEventRecord.occupied += 1;
+        instanceEventRepository.setOccupied(instanceEventRecord.occupied + 1, id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Transactional
     public ResponseEntity<Object> cancelEvent(int id){
         instanceEventRepository.cancelEventById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Transactional
     public ResponseEntity<Object> postponeEvent(int id, LocalDateTime date){
-        InstanceEventRecord instanceEventRecord = getInstanceEvent(id);
-        instanceEventRecord.setDate(date);
+        instanceEventRepository.setDate(date, id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     public List<InstanceEventRecord> findEventByDateAndClub(LocalDateTime date, int clubId){
         return instanceEventRepository.findEventByDateAndClub(date, clubId);
     }
-
 
     private DayOfTheWeek dayOfTheWeekConverter(DayOfWeek dayOfWeek){
         switch (dayOfWeek.toString()){

@@ -18,14 +18,24 @@ import java.util.List;
 @Repository
 public interface InstanceEventRepository extends JpaRepository<InstanceEventRecord, Integer> {
 
-    @Query("select e from instanceEvents e where e.eventId = ?1")
+    @Query("select e from instanceEvents e where e.id = ?1")
     InstanceEventRecord selectInstanceEventById(int id);
 
+    @Modifying
     @Query("DELETE FROM instanceEvents e WHERE e.date < ?1")
-    void archiveAllOlderThanMonth(LocalDate date);
+    void archiveAllOlderThanMonth(LocalDateTime date);
 
+    @Modifying
     @Query("DELETE FROM instanceEvents e WHERE e.id = ?1")
     void cancelEventById(int id);
+
+    @Modifying
+    @Query("UPDATE instanceEvents e SET e.occupied = ?1 WHERE e.id = ?2")
+    void setOccupied(int newOccupied, int id);
+
+    @Modifying
+    @Query("UPDATE instanceEvents e SET e.date = ?1 WHERE e.id = ?2")
+    void setDate(LocalDateTime date, int id);
 
     @Modifying
     @Query(value = "insert into instanceEvents (EVENTID, DATE, LIMITOFPARTICIPANTS, OCCUPIED) values (?1, ?2, ?3, 0)", nativeQuery = true)

@@ -1,10 +1,12 @@
 package com.jwzp_kr_kj.controllers;
 
+import com.jwzp_kr_kj.models.data.InstanceEventData;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.models.records.InstanceEventRecord;
 import com.jwzp_kr_kj.services.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -40,13 +42,13 @@ public class InstanceEventController {
         return instanceEventService.cancelEvent(id);
     }
 
-    @PostMapping("/postpone/{id}")
-    public ResponseEntity<?> cancelEvent(@PathVariable int id, LocalDateTime date){
+    @PostMapping(value = "/postpone/{id}", consumes = "application/json")
+    public ResponseEntity<?> postponeEvent(@PathVariable int id, @RequestParam("date") @DateTimeFormat(pattern = "yyyy-dd-MM HH:mm:ss") LocalDateTime date){
         return instanceEventService.postponeEvent(id, date);
     }
 
     @GetMapping("/find")
-    public ResponseEntity<?> cancelEvent(@RequestParam LocalDateTime date, @RequestParam int clubId){
+    public ResponseEntity<?> findEvent(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-dd-MM HH:mm:ss")  LocalDateTime date, @RequestParam("clubId") int clubId){
         return ResponseEntity.ok(instanceEventService.findEventByDateAndClub(date, clubId));
     }
 }
