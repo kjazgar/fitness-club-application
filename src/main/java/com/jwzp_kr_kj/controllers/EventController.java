@@ -1,5 +1,6 @@
 package com.jwzp_kr_kj.controllers;
 
+import com.jwzp_kr_kj.models.data.EventData;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.services.*;
 import org.springframework.data.domain.Page;
@@ -62,7 +63,7 @@ public class EventController {
     }
 
     @PatchMapping(path = "/v1/events/{id}")
-    public ResponseEntity<Object> updateEvent(@PathVariable int id, @RequestBody EventRecord newEvent) {
+    public ResponseEntity<Object> updateEvent(@PathVariable int id, @RequestBody EventData newEvent) {
         Optional<EventRecord> updatedEvent = eventService.getEvent(id);
         if (updatedEvent.isPresent()) {
             return eventService.updateEvent(id, newEvent);

@@ -27,7 +27,7 @@ public class EventData {
         this.clubId = 0;
     }
 
-    public EventData(int id, String name, DayOfTheWeek day, LocalTime time, Duration duration, int coachId, int clubId) {
+    public EventData(String name, DayOfTheWeek day, LocalTime time, Duration duration, int coachId, int clubId) {
         this.title = name;
         this.dayOfTheWeek = day;
         this.time = time;

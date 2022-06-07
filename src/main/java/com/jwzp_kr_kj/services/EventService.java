@@ -2,6 +2,7 @@ package com.jwzp_kr_kj.services;
 
 import com.jwzp_kr_kj.models.DayOfTheWeek;
 import com.jwzp_kr_kj.Logs;
+import com.jwzp_kr_kj.models.data.EventData;
 import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.models.records.EventRecord;
@@ -57,6 +58,23 @@ public class EventService {
         return club.get().isWithinClubOpeningHours(event.getDayOfTheWeek(), event.getTime(), event.getDuration());
     }
 
+    public boolean checkEventConditions(EventData event){
+        int clubId = event.getClubId();
+        int coachId = event.getCoachId();
+        Optional<ClubRecord> club = clubRepository.findById(clubId);
+        Optional<CoachRecord> coach = coachRepository.findById(coachId);
+
+        if(event.getDuration().toMinutes() > 1440){
+            return false;
+        }
+
+        if(club.isEmpty() || coach.isEmpty()){
+            return false;
+        }
+
+        return club.get().isWithinClubOpeningHours(event.getDayOfTheWeek(), event.getTime(), event.getDuration());
+    }
+
     public ResponseEntity<Object> addEvent(EventRecord event){
         if(checkEventConditions(event)){
             eventRepository.save(event);
@@ -79,7 +97,7 @@ public class EventService {
         }
     }
 
-    public ResponseEntity<Object> updateEvent(int id, EventRecord newEvent){
+    public ResponseEntity<Object> updateEvent(int id, EventData newEvent){
         if(checkEventConditions(newEvent)){
             eventRepository.findById(id).map(event -> {
                 event.setTitle(newEvent.getTitle());
