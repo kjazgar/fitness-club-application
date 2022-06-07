@@ -82,7 +82,6 @@ public class EventControllerTest {
     public void printEventByIdTest(){
         var eventController = new EventController(eventService);
         Mockito.when(eventService.getEvent(Mockito.any(Integer.class))).thenReturn(Optional.of(event));
-        eventController.addEvent(event);
         var result = eventController.printEventWithId(1);
         assert result.equals(ResponseEntity.ok(Optional.of(event)));
     }

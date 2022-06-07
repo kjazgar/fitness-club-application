@@ -8,11 +8,12 @@ import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.services.CoachService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -33,9 +34,13 @@ public class CoachController {
     }
 
     @GetMapping("/v1/coaches/{id}")
-    public ResponseEntity<String> printCoachWithId(@PathVariable int id) throws JsonProcessingException {
-        String json = ow.writeValueAsString(coachService.getCoach(id));
-        return ResponseEntity.ok(json);
+    public ResponseEntity<?> printCoachWithId(@PathVariable int id){
+        Optional<CoachRecord> coach = coachService.getCoach(id);
+        if(coach.isPresent()){
+            return ResponseEntity.ok(coach);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/v1/coaches/page")
@@ -50,7 +55,12 @@ public class CoachController {
 
     @PatchMapping(path = "/v1/coaches/{id}")
     public ResponseEntity<Object> updateCoach(@PathVariable int id, @RequestBody CoachData newCoach) {
-        return coachService.updateCoach(id, newCoach);
+        Optional<CoachRecord> updatedCoach = coachService.getCoach(id);
+        if (updatedCoach.isPresent()) {
+            return coachService.updateCoach(id, newCoach);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping("/v1/coaches/{id}")

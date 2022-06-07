@@ -11,7 +11,7 @@ public class CoachData {
         this.yearOfBirth = 0;
     }
 
-    public CoachData(int id, String name, String surname, int yearOfBirth) {
+    public CoachData(String name, String surname, int yearOfBirth) {
         this.firstName = name;
         this.lastName = surname;
         this.yearOfBirth = yearOfBirth;
