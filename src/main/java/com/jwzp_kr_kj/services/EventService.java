@@ -47,6 +47,10 @@ public class EventService {
         Optional<ClubRecord> club = clubRepository.findById(clubId);
         Optional<CoachRecord> coach = coachRepository.findById(coachId);
 
+        if(!checkIfCoachIsNotAssignYet(coachId, event)){
+            return false;
+        }
+
         if(event.getDuration().toMinutes() > 1440){
             return false;
         }
@@ -56,6 +60,47 @@ public class EventService {
         }
 
         return club.get().isWithinClubOpeningHours(event.getDayOfTheWeek(), event.getTime(), event.getDuration());
+    }
+
+    public boolean checkIfHoursOverlap(EventRecord event1, EventRecord event2){
+        if(event1.getDayOfTheWeek().equals(event2.getDayOfTheWeek())){
+            if(event1.getTime().equals(event2.getTime()))
+                return true;
+
+            if(event1.getTime().compareTo(event2.getTime()) == -1
+                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime()) == 1){
+                return true;
+            }
+
+            if(event1.getTime().compareTo(event2.getTime()) == -1
+                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime().plus(event2.getDuration())) == 1){
+                return true;
+            }
+
+            if(event1.getTime().compareTo(event2.getTime()) == 1
+                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime()) == -1){
+                return true;
+            }
+
+            if(event1.getTime().compareTo(event2.getTime()) == 1
+                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime().plus(event2.getDuration())) == -1){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean checkIfCoachIsNotAssignYet(int coachId, EventRecord eventRecord){
+        List<EventRecord> eventsPerCoach = eventRepository.findByCoachId(coachId);
+
+        for(var eventPerCoach : eventsPerCoach){
+            if(checkIfHoursOverlap(eventRecord, eventPerCoach)){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public boolean checkEventConditions(EventData event){
@@ -81,6 +126,7 @@ public class EventService {
             logger.info(Logs.logAdded(event, event.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+
         logger.error(Logs.logNotAccepted(EventRecord.class));
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
@@ -91,10 +137,11 @@ public class EventService {
             logger.info(Logs.logDeleted(EventRecord.class, id));
             eventRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            logger.error(Logs.logNotFound(EventRecord.class, id));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
+        logger.error(Logs.logNotFound(EventRecord.class, id));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
     }
 
     public ResponseEntity<Object> updateEvent(int id, EventData newEvent){
