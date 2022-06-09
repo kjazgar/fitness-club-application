@@ -5,14 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jwzp_kr_kj.models.data.CoachData;
 import com.jwzp_kr_kj.models.records.CoachRecord;
+import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.services.CoachService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -21,21 +25,26 @@ public class CoachController {
     CoachService coachService;
     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
+    @Autowired
     public CoachController(CoachService coachService) {
         this.coachService = coachService;
     }
 
     @GetMapping("/v1/coaches")
-    public ResponseEntity<Object> printCoaches() throws JsonProcessingException {
-        List<CoachRecord> allCoaches = coachService.getAllCoaches();
-        String json = ow.writeValueAsString(allCoaches);
-        return ResponseEntity.ok(json);
+    public ResponseEntity<?> printCoaches() throws JsonProcessingException {
+//        List<CoachRecord> allCoaches = coachService.getAllCoaches();
+//        String json = ow.writeValueAsString(allCoaches);
+        return ResponseEntity.ok(coachService.getAllCoaches());
     }
 
     @GetMapping("/v1/coaches/{id}")
-    public ResponseEntity<String> printCoachWithId(@PathVariable int id) throws JsonProcessingException {
-        String json = ow.writeValueAsString(coachService.getCoach(id));
-        return ResponseEntity.ok(json);
+    public ResponseEntity<?> printCoachWithId(@PathVariable int id) throws JsonProcessingException {
+        Optional<CoachRecord> coach = coachService.getCoach(id);
+        if(coach.isPresent()){
+            return ResponseEntity.ok(coach);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/v1/coaches/page")
