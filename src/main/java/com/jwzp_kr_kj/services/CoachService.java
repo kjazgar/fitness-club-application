@@ -79,26 +79,6 @@ public class CoachService {
         return coachRepository.findAll(p);
     }
 
-    public boolean coachIsAvailable(int id, EventRecord newEvent) {
-        List<EventRecord> coachEvents = eventRepository.findByCoachId(id);
-        LocalTime startNewEvent = newEvent.getTime();
-        LocalTime endNewEvent = startNewEvent.plus(newEvent.getDuration());
-        for (EventRecord e : coachEvents) {
-            LocalTime startEvent = e.getTime();
-            LocalTime endEvent = startEvent.plus(e.getDuration());
-            if (startNewEvent.isAfter(endNewEvent) && startEvent.isAfter(endEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek())) {
-                return false;
-            } else if (startNewEvent.isAfter(endNewEvent) && (endEvent.isAfter(startNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || startEvent.isBefore(endNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek().next()))) {
-                return false;
-            } else if (startEvent.isAfter(endNewEvent) && (endNewEvent.isAfter(startEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek()) || startNewEvent.isBefore(endEvent) && newEvent.getDayOfTheWeek().equals(e.getDayOfTheWeek().next()))) {
-                return false;
-            } else if (endEvent.isAfter(startEvent) && endNewEvent.isAfter(startNewEvent) && e.getDayOfTheWeek().equals(newEvent.getDayOfTheWeek())) {
-                return (startEvent.isAfter(endNewEvent) || endEvent.isBefore(startNewEvent));
-            }
-        }
-        return true;
-    }
-
     public List<CoachRecord> getAllCoaches() {
         logger.info(Logs.logGetAll(CoachRecord.class));
         return coachRepository.findAll();

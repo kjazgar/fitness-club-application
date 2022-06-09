@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jwzp_kr_kj.models.data.ClubData;
 import com.jwzp_kr_kj.models.records.ClubRecord;
 import com.jwzp_kr_kj.services.ClubService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class ClubController {
         this.clubService = clubService;
     }
 
+    @Operation(summary = "show all clubs")
     @GetMapping("/v1/clubs")
     public ResponseEntity<String> printClubs() throws JsonProcessingException {
         List<ClubRecord> allClubs = clubService.getAllClubs();
@@ -43,27 +45,32 @@ public class ClubController {
         return ResponseEntity.ok(json);
     }
 
+    @Operation(summary = "get club with provided id")
     @GetMapping("/v1/clubs/{id}")
     public ResponseEntity<String> printClubWithId(@PathVariable int id) throws JsonProcessingException {
         String json = ow.writeValueAsString(clubService.getClub(id));
         return ResponseEntity.ok(json);
     }
 
+    @Operation(summary = "show clubs on a given page")
     @GetMapping("/v1/clubs/page")
     public Page<ClubRecord> getAll(Pageable p){
         return clubService.getPage(p);
     }
 
+    @Operation(summary = "add club")
     @PostMapping(path = "/v1/clubs")
     public ResponseEntity<ClubRecord> addClub(@RequestBody ClubData club) {
         return clubService.addClub(club);
     }
 
+    @Operation(summary = "update club")
     @PatchMapping(path = "/v1/clubs/{id}")
     public ResponseEntity<Object> updateClub(@PathVariable int id, @RequestBody ClubData newClub) {
         return clubService.updateClub(id, newClub);
     }
 
+    @Operation(summary = "delete club")
     @DeleteMapping(path = "/v1/clubs/{id}")
     public ResponseEntity<ClubRecord> deleteClub(@PathVariable(value = "id") int id) {
         return clubService.deleteClub(id);

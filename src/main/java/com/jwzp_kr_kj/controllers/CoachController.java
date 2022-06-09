@@ -7,6 +7,7 @@ import com.jwzp_kr_kj.models.data.CoachData;
 import com.jwzp_kr_kj.models.records.CoachRecord;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.services.CoachService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,13 +30,13 @@ public class CoachController {
         this.coachService = coachService;
     }
 
+    @Operation(summary = "show all coaches")
     @GetMapping("/v1/coaches")
-    public ResponseEntity<?> printCoaches() throws JsonProcessingException {
-//        List<CoachRecord> allCoaches = coachService.getAllCoaches();
-//        String json = ow.writeValueAsString(allCoaches);
+    public ResponseEntity<?> printCoaches(){
         return ResponseEntity.ok(coachService.getAllCoaches());
     }
 
+    @Operation(summary = "get coach with provided id")
     @GetMapping("/v1/coaches/{id}")
     public ResponseEntity<?> printCoachWithId(@PathVariable int id) throws JsonProcessingException {
         Optional<CoachRecord> coach = coachService.getCoach(id);
@@ -46,16 +47,19 @@ public class CoachController {
         }
     }
 
+    @Operation(summary = "show coaches on a given page")
     @GetMapping("/v1/coaches/page")
     public Page<CoachRecord> getAll(Pageable p){
         return coachService.getPage(p);
     }
 
+    @Operation(summary = "add coach")
     @PostMapping(path = "/v1/coaches")
     public ResponseEntity<CoachRecord> addCoach(@RequestBody CoachData coach) {
         return coachService.addCoach(coach);
     }
 
+    @Operation(summary = "update coach")
     @PatchMapping(path = "/v1/coaches/{id}")
     public ResponseEntity<Object> updateCoach(@PathVariable int id, @RequestBody CoachData newCoach) {
         Optional<CoachRecord> updatedCoach = coachService.getCoach(id);
@@ -66,6 +70,7 @@ public class CoachController {
         }
     }
 
+    @Operation(summary = "delete coach")
     @DeleteMapping("/v1/coaches/{id}")
     public ResponseEntity<Object> deleteCoach(@PathVariable(value = "id") int id) {
         return coachService.deleteCoach(id);
