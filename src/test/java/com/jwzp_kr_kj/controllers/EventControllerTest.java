@@ -65,8 +65,8 @@ public class EventControllerTest {
     public void printAllEventsEmptyTest() {
         var eventController = new EventController(eventService);
         var result = eventController.printEvents();
-        assert result.getBody().equals(Collections.emptyList());
-        assert result.getStatusCode().equals(HttpStatus.OK);
+        var expected = ResponseEntity.ok(Collections.emptyList());
+        assert result.equals(expected);
         Mockito.verify(eventService, Mockito.times(1)).getAllEvents();
     }
 
