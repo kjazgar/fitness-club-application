@@ -40,6 +40,7 @@ public class InstanceEventService {
         return instanceEventRepository.findAll();
     }
 
+//    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void automaticallyArchiveEvents() {
@@ -49,6 +50,7 @@ public class InstanceEventService {
         instanceEventRepository.archiveAllOlderThanMonth(monthAgoDate);
     }
 
+//    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void automaticallyCreateEvents() {
