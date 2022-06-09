@@ -67,25 +67,14 @@ public class EventService {
             if(event1.getTime().equals(event2.getTime()))
                 return true;
 
-            if(event1.getTime().compareTo(event2.getTime()) == -1
-                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime()) == 1){
+            if(event1.getTime().compareTo(event2.getTime()) < 0
+                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime()) > 0){
                 return true;
             }
 
-            if(event1.getTime().compareTo(event2.getTime()) == -1
-                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime().plus(event2.getDuration())) == 1){
-                return true;
-            }
+            return event1.getTime().compareTo(event2.getTime()) > 0
+                    && event2.getTime().plus(event2.getDuration()).compareTo(event1.getTime()) > 0;
 
-            if(event1.getTime().compareTo(event2.getTime()) == 1
-                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime()) == -1){
-                return true;
-            }
-
-            if(event1.getTime().compareTo(event2.getTime()) == 1
-                    && event1.getTime().plus(event1.getDuration()).compareTo(event2.getTime().plus(event2.getDuration())) == -1){
-                return true;
-            }
         }
 
         return false;
