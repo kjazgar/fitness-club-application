@@ -78,6 +78,7 @@ public class ClubRecord extends RepresentationModel<ClubRecord> {
         LocalTime clubEndHour = clubOpeningHours.to;
         LocalTime endHour = startHour.plusHours(duration.toHours());
 
-       return clubStartHour.compareTo(startHour) <= 0 && clubEndHour.compareTo(startHour) >= 0 && clubEndHour.compareTo(endHour) >= 0;
+       return clubStartHour.compareTo(startHour) <= 0 && clubEndHour.compareTo(startHour) >= 0 &&
+               clubEndHour.compareTo(endHour) >= 0;
     }
 }

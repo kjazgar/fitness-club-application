@@ -35,10 +35,6 @@ public class InstanceEventRecord {
 
     }
 
-    public void setCoachOccupied(int occupied){
-        this.occupied = occupied;
-    }
-
     public int getId() {
         return id;
     }
