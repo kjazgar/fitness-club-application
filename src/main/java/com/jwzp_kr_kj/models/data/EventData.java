@@ -3,6 +3,7 @@ package com.jwzp_kr_kj.models.data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jwzp_kr_kj.models.DayOfTheWeek;
+import com.jwzp_kr_kj.models.records.EventRecord;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +35,15 @@ public class EventData {
         this.duration = duration;
         this.coachId = coachId;
         this.clubId = clubId;
+    }
+
+    public EventData(EventRecord eventRecord) {
+        this.title = eventRecord.getTitle();
+        this.dayOfTheWeek = eventRecord.getDayOfTheWeek();
+        this.time = eventRecord.getTime();
+        this.duration = eventRecord.getDuration();
+        this.coachId = eventRecord.getCoachId();
+        this.clubId = eventRecord.getClubId();
     }
 
     public String getTitle() {

@@ -1,6 +1,5 @@
 package com.jwzp_kr_kj.services;
 
-import com.jwzp_kr_kj.models.DayOfTheWeek;
 import com.jwzp_kr_kj.Logs;
 import com.jwzp_kr_kj.models.data.EventData;
 import com.jwzp_kr_kj.models.records.ClubRecord;
@@ -16,13 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,28 +35,24 @@ public class EventService {
         this.coachRepository = coachRepository;
     }
 
-    public boolean checkEventConditions(EventRecord event){
-        int clubId = event.getClubId();
-        int coachId = event.getCoachId();
-        Optional<ClubRecord> club = clubRepository.findById(clubId);
-        Optional<CoachRecord> coach = coachRepository.findById(coachId);
-
-        if(!checkIfCoachIsNotAssignYet(coachId, event)){
-            return false;
+    public ResponseEntity<Object> checkEventConditions(ClubRecord club, CoachRecord coach, EventData event){
+        if(checkIfCoachIsAlreadyAssign(coach.getId(), event)){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("coach is already assigned");
         }
 
         if(event.getDuration().toMinutes() > 1440){
-            return false;
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("event cannot be longer than 24 hours");
         }
 
-        if(club.isEmpty() || coach.isEmpty()){
-            return false;
+        if(!club.isWithinClubOpeningHours(event.getDayOfTheWeek(), event.getTime(), event.getDuration())){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("event has to be within club's opening hours");
+
         }
 
-        return club.get().isWithinClubOpeningHours(event.getDayOfTheWeek(), event.getTime(), event.getDuration());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    public boolean checkIfHoursOverlap(EventRecord event1, EventRecord event2){
+    public boolean checkIfHoursOverlap(EventData event1, EventData event2){
         if(event1.getDayOfTheWeek().equals(event2.getDayOfTheWeek())){
             if(event1.getTime().equals(event2.getTime()))
                 return true;
@@ -80,44 +70,43 @@ public class EventService {
         return false;
     }
 
-    public boolean checkIfCoachIsNotAssignYet(int coachId, EventRecord eventRecord){
+    public boolean checkIfCoachIsAlreadyAssign(int coachId, EventData eventData){
         List<EventRecord> eventsPerCoach = eventRepository.findByCoachId(coachId);
 
         for(var eventPerCoach : eventsPerCoach){
-            if(checkIfHoursOverlap(eventRecord, eventPerCoach)){
-                return false;
+            EventData eventDataPerCoach = new EventData(eventPerCoach);
+            if(checkIfHoursOverlap(eventData, eventDataPerCoach)){
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
-    public boolean checkEventConditions(EventData event){
+    public ResponseEntity<Object> addEvent(EventRecord event){
         int clubId = event.getClubId();
         int coachId = event.getCoachId();
         Optional<ClubRecord> club = clubRepository.findById(clubId);
         Optional<CoachRecord> coach = coachRepository.findById(coachId);
 
-        if(event.getDuration().toMinutes() > 1440){
-            return false;
+        if(club.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("provided club does not exist");
         }
 
-        if(club.isEmpty() || coach.isEmpty()){
-            return false;
+        if(coach.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("provided coach does not exist");
         }
 
-        return club.get().isWithinClubOpeningHours(event.getDayOfTheWeek(), event.getTime(), event.getDuration());
-    }
+        EventData eventData = new EventData(event);
 
-    public ResponseEntity<Object> addEvent(EventRecord event){
-        if(checkEventConditions(event)){
+        if(checkEventConditions(club.get(), coach.get(), eventData).getStatusCode().equals(HttpStatus.OK)){
             eventRepository.save(event);
             logger.info(Logs.logAdded(event, event.getId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
 
         logger.error(Logs.logNotAccepted(EventRecord.class));
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        return checkEventConditions(club.get(), coach.get(), eventData);
     }
 
     public ResponseEntity<Object> deleteEvent(int id) {
@@ -134,7 +123,20 @@ public class EventService {
     }
 
     public ResponseEntity<Object> updateEvent(int id, EventData newEvent){
-        if(checkEventConditions(newEvent)){
+        int clubId = newEvent.getClubId();
+        int coachId = newEvent.getCoachId();
+        Optional<ClubRecord> club = clubRepository.findById(clubId);
+        Optional<CoachRecord> coach = coachRepository.findById(coachId);
+
+        if(club.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("provided club does not exist");
+        }
+
+        if(coach.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("provided coach does not exist");
+        }
+
+        if(checkEventConditions(club.get(), coach.get(), newEvent).getStatusCode().equals(HttpStatus.OK)){
             eventRepository.findById(id).map(event -> {
                 event.setTitle(newEvent.getTitle());
                 event.setDayOfTheWeek(newEvent.getDayOfTheWeek());
