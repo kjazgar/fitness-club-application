@@ -3,6 +3,7 @@ package com.jwzp_kr_kj.controllers;
 import com.jwzp_kr_kj.models.data.InstanceEventData;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.models.records.InstanceEventRecord;
+import com.jwzp_kr_kj.models.records.PersonRecord;
 import com.jwzp_kr_kj.services.*;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
@@ -35,9 +36,9 @@ public class InstanceEventController {
     }
 
     @Operation(summary = "register for a given event")
-    @PostMapping("/v1/register/{id}")
-    public ResponseEntity<?> registerForEvent(@PathVariable int id){
-        return instanceEventService.registerForEvent(id);
+    @PostMapping("/v1/register")
+    public ResponseEntity<?> registerForEvent(@RequestBody PersonRecord person){
+        return instanceEventService.registerForEvent(person);
     }
 
     @Operation(summary = "cancel event")

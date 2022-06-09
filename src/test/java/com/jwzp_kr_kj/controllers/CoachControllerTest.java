@@ -25,7 +25,6 @@ public class CoachControllerTest {
 
     @Mock
     CoachService coachService;
-    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @BeforeEach
     private void setup(){

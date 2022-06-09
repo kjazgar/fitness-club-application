@@ -5,10 +5,8 @@ import com.jwzp_kr_kj.models.DayOfTheWeek;
 import com.jwzp_kr_kj.models.data.InstanceEventData;
 import com.jwzp_kr_kj.models.records.EventRecord;
 import com.jwzp_kr_kj.models.records.InstanceEventRecord;
-import com.jwzp_kr_kj.repos.ClubRepository;
-import com.jwzp_kr_kj.repos.CoachRepository;
-import com.jwzp_kr_kj.repos.EventRepository;
-import com.jwzp_kr_kj.repos.InstanceEventRepository;
+import com.jwzp_kr_kj.models.records.PersonRecord;
+import com.jwzp_kr_kj.repos.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +26,21 @@ import java.util.Optional;
 public class InstanceEventService {
     public EventRepository eventRepository;
     public InstanceEventRepository instanceEventRepository;
+    public PersonService personService;
     private final Logger logger = LogManager.getLogger(InstanceEventService.class);
 
     @Autowired
-    public InstanceEventService(EventRepository eventRepository, InstanceEventRepository instanceEventRepository){
+    public InstanceEventService(EventRepository eventRepository, InstanceEventRepository instanceEventRepository, PersonService personService){
         this.eventRepository = eventRepository;
         this.instanceEventRepository = instanceEventRepository;
+        this.personService = personService;
     }
 
     public List<InstanceEventRecord> getAllInstanceEvents() {
         return instanceEventRepository.findAll();
     }
 
+    //    @Scheduled(cron ="0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void automaticallyArchiveEvents() {
@@ -49,6 +50,7 @@ public class InstanceEventService {
         instanceEventRepository.archiveAllOlderThanMonth(monthAgoDate);
     }
 
+    //    @Scheduled(cron ="0 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void automaticallyCreateEvents() {
@@ -73,14 +75,15 @@ public class InstanceEventService {
     }
 
     @Transactional
-    public ResponseEntity<Object> registerForEvent(int id){
-        InstanceEventRecord instanceEventRecord = getInstanceEvent(id);
+    public ResponseEntity<Object> registerForEvent(PersonRecord personRecord){
+        InstanceEventRecord instanceEventRecord = getInstanceEvent(personRecord.getInstanceEventId());
 
         if(instanceEventRecord == null || instanceEventRecord.getOccupied() >= instanceEventRecord.getLimitOfParticipants()){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
-        instanceEventRepository.setOccupied(instanceEventRecord.occupied + 1, id);
+        instanceEventRepository.setOccupied(instanceEventRecord.occupied + 1, personRecord.getInstanceEventId());
+        personService.addPerson(personRecord);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
