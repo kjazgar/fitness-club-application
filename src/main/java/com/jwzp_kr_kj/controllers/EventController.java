@@ -50,13 +50,13 @@ public class EventController {
         }
     }
 
-    @GetMapping(value = "/v1/events", params = "coachId")
+    @GetMapping(value = "/v1/events/bycoach", params = "coachId")
     public ResponseEntity<?> printAllEventsByTheCoach(@RequestParam("coachId") int coachId){
         List<EventRecord> events = eventService.getEventsByCoach(coachId);
         return ResponseEntity.ok(events);
     }
 
-    @GetMapping(value = "/v1/events", params = "clubId")
+    @GetMapping(value = "/v1/events/byclub", params = "clubId")
     public ResponseEntity<?> printAllEventsByTheClub(@RequestParam("clubId") int clubId){
         List<EventRecord> events = eventService.getEventsByClub(clubId);
         return ResponseEntity.ok(events);

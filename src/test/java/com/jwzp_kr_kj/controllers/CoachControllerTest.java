@@ -31,7 +31,6 @@ public class CoachControllerTest {
     private void setup(){
 
         coach = new CoachRecord(1,"Camille", "Claudienne", 1950);
-
         listOfCoaches = List.of(
                 new CoachRecord(1,"Ygrek", "Iksinski", 1990),
                 new CoachRecord(2,"Ktos", "Fajny", 1993)
