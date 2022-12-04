@@ -1,7 +1,3 @@
-# jwzp_kr_kj
-
-
-
 ## Running the application
 
 To run the application, run the following command in a terminal window (in the complete) directory:
